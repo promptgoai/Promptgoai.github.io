@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All AI Prompts - PromptGoAI</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+}
+
+nav {
+    background: #111827;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+header {
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card {
+    background: #1e293b;
+    width: 280px;
+    margin: 15px;
+    padding: 20px;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div>PromptGoAI</div>
+    <div>
+        <a href="index.html">Home</a>
+    </div>
+</nav>
+
+<header>
+    <h1>All AI Prompts</h1>
+    <p>Explore Powerful Prompts for Content, Business, Study & Coding</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h3>Instagram Caption Generator</h3>
+<p id="a1">Generate 20 viral Instagram captions with trending hashtags.</p>
+<button onclick="copyText('a1')">Copy Prompt</button>
+</div>
+
+<div class="card">
+<h3>YouTube Script Generator</h3>
+<p id="a2">Write a 7-minute engaging YouTube script on AI tools.</p>
+<button onclick="copyText('a2')">Copy Prompt</button>
+</div>
+
+<div class="card">
+<h3>Business Plan Creator</h3>
+<p id="a3">Create a detailed startup business plan with revenue model.</p>
+<button onclick="copyText('a3')">Copy Prompt</button>
+</div>
+
+<div class="card">
+<h3>Assignment Writer</h3>
+<p id="a4">Write a 1000-word assignment in simple language on any topic.</p>
+<button onclick="copyText('a4')">Copy Prompt</button>
+</div>
+
+<div class="card">
+<h3>Code Debug Prompt</h3>
+<p id="a5">Analyze and fix errors in the provided HTML, CSS or JS code.</p>
+<button onclick="copyText('a5')">Copy Prompt</button>
+</div>
+
+</div>
+
+<script>
+function copyText(id) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text);
+    alert("Prompt Copied!");
+}
+</script>
+
+</body>
+</html>
