@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>PromptGoAI - Best AI Prompts</title>
+<title>PromptGoAI - Professional AI Prompt Platform</title>
 
-<meta name="description" content="PromptGoAI provides powerful AI prompts for ChatGPT, Gemini and photo editing.">
+<meta name="description" content="PromptGoAI is a professional AI prompt platform providing high quality prompts for ChatGPT, Gemini and AI creators.">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,13 +12,15 @@
 body{
 margin:0;
 font-family: Arial, sans-serif;
-background:#0f172a;
+background:#0b1120;
 color:white;
 }
 
 nav{
+position:sticky;
+top:0;
 background:#111827;
-padding:15px;
+padding:15px 40px;
 display:flex;
 justify-content:space-between;
 align-items:center;
@@ -27,52 +29,80 @@ align-items:center;
 nav a{
 color:white;
 text-decoration:none;
-margin-left:20px;
+margin-left:25px;
 font-size:14px;
+opacity:0.8;
+}
+
+nav a:hover{
+opacity:1;
 }
 
 .hero{
 text-align:center;
-padding:80px 20px;
+padding:120px 20px;
+background:linear-gradient(135deg,#1e3a8a,#2563eb);
 }
 
 .hero h1{
-font-size:40px;
-margin-bottom:10px;
+font-size:48px;
+margin-bottom:15px;
 }
 
 .hero p{
-opacity:0.8;
-margin-bottom:20px;
+font-size:18px;
+opacity:0.9;
+margin-bottom:30px;
 }
 
 .btn{
 display:inline-block;
-padding:12px 25px;
-background:#3b82f6;
-color:white;
-text-decoration:none;
+padding:14px 30px;
 border-radius:30px;
+text-decoration:none;
+margin:10px;
+font-weight:bold;
+}
+
+.primary{
+background:white;
+color:#1e3a8a;
+}
+
+.secondary{
+border:2px solid white;
+color:white;
 }
 
 .section{
-padding:50px 20px;
+padding:80px 20px;
 text-align:center;
+}
+
+.grid{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
 }
 
 .card{
 background:#1f2937;
-padding:20px;
-margin:15px;
+padding:25px;
 border-radius:15px;
-display:inline-block;
-width:250px;
+width:260px;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 10px 25px rgba(0,0,0,0.5);
 }
 
 footer{
 background:#111827;
+padding:30px;
 text-align:center;
-padding:20px;
 font-size:14px;
 opacity:0.7;
 }
@@ -91,28 +121,38 @@ opacity:0.7;
 </nav>
 
 <div class="hero">
-<h1>Best AI Prompts Collection</h1>
-<p>Powerful prompts for creators, developers and editors.</p>
-<a href="chatgpt.html" class="btn">Explore Prompts</a>
+<h1>Professional AI Prompts for Creators</h1>
+<p>High quality prompts for ChatGPT, Gemini and AI productivity tools.</p>
+
+<a href="chatgpt.html" class="btn primary">Explore Prompts</a>
+<a href="gemini.html" class="btn secondary">View Gemini</a>
 </div>
 
 <div class="section">
-<h2>Categories</h2>
+<h2>Why Choose PromptGoAI?</h2>
+
+<div class="grid">
 
 <div class="card">
-<h3>ChatGPT Prompts</h3>
-<p>High quality AI prompts.</p>
+<h3>Expert Written Prompts</h3>
+<p>Carefully crafted prompts for powerful AI results.</p>
 </div>
 
 <div class="card">
-<h3>Gemini Prompts</h3>
-<p>Smart prompts for AI results.</p>
+<h3>SEO Optimized</h3>
+<p>Prompts designed for creators and digital growth.</p>
 </div>
 
+<div class="card">
+<h3>Free & Easy Access</h3>
+<p>Simple, clean and user friendly interface.</p>
+</div>
+
+</div>
 </div>
 
 <footer>
-© 2026 PromptGoAI | All Rights Reserved
+© 2026 PromptGoAI | Built for AI Creators
 </footer>
 
 </body>
