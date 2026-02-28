@@ -78,40 +78,7 @@ button {
     <p>Explore Powerful Prompts for Content, Business, Study & Coding</p>
 </header>
 
-<div class="container">
-
-<div class="card">
-<h3>Instagram Caption Generator</h3>
-<p id="a1">Generate 20 viral Instagram captions with trending hashtags.</p>
-<button onclick="copyText('a1')">Copy Prompt</button>
-</div>
-
-<div class="card">
-<h3>YouTube Script Generator</h3>
-<p id="a2">Write a 7-minute engaging YouTube script on AI tools.</p>
-<button onclick="copyText('a2')">Copy Prompt</button>
-</div>
-
-<div class="card">
-<h3>Business Plan Creator</h3>
-<p id="a3">Create a detailed startup business plan with revenue model.</p>
-<button onclick="copyText('a3')">Copy Prompt</button>
-</div>
-
-<div class="card">
-<h3>Assignment Writer</h3>
-<p id="a4">Write a 1000-word assignment in simple language on any topic.</p>
-<button onclick="copyText('a4')">Copy Prompt</button>
-</div>
-
-<div class="card">
-<h3>Code Debug Prompt</h3>
-<p id="a5">Analyze and fix errors in the provided HTML, CSS or JS code.</p>
-<button onclick="copyText('a5')">Copy Prompt</button>
-</div>
-
-</div>
-
+<div class="container" id="promptContainer"></div>
 <script>
 function copyText(id) {
     const text = document.getElementById(id).innerText;
