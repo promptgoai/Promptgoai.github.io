@@ -1,159 +1,137 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>PromptGoAI - Professional AI Prompt Platform</title>
-
-<meta name="description" content="PromptGoAI is a professional AI prompt platform providing high quality prompts for ChatGPT, Gemini and AI creators.">
-
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PromptGoAI - Best AI Prompts</title>
 
 <style>
-
-body{
-margin:0;
-font-family: Arial, sans-serif;
-background:#0b1120;
-color:white;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
 }
 
-nav{
-position:sticky;
-top:0;
-background:#111827;
-padding:15px 40px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+header {
+    padding: 60px 20px;
+    text-align: center;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
 }
 
-nav a{
-color:white;
-text-decoration:none;
-margin-left:25px;
-font-size:14px;
-opacity:0.8;
+header h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
 }
 
-nav a:hover{
-opacity:1;
+header p {
+    font-size: 18px;
+    opacity: 0.9;
 }
 
-.hero{
-text-align:center;
-padding:120px 20px;
-background:linear-gradient(135deg,#1e3a8a,#2563eb);
+.search-box {
+    text-align: center;
+    margin: 30px;
 }
 
-.hero h1{
-font-size:48px;
-margin-bottom:15px;
+.search-box input {
+    width: 80%;
+    max-width: 400px;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
 }
 
-.hero p{
-font-size:18px;
-opacity:0.9;
-margin-bottom:30px;
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
 }
 
-.btn{
-display:inline-block;
-padding:14px 30px;
-border-radius:30px;
-text-decoration:none;
-margin:10px;
-font-weight:bold;
+.card {
+    background: #1e293b;
+    width: 300px;
+    margin: 15px;
+    padding: 20px;
+    border-radius: 12px;
+    transition: 0.3s;
 }
 
-.primary{
-background:white;
-color:#1e3a8a;
+.card:hover {
+    transform: translateY(-5px);
 }
 
-.secondary{
-border:2px solid white;
-color:white;
+.card h3 {
+    margin-top: 0;
 }
 
-.section{
-padding:80px 20px;
-text-align:center;
+button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
 }
 
-.grid{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:20px;
+button:hover {
+    background: #1d4ed8;
 }
-
-.card{
-background:#1f2937;
-padding:25px;
-border-radius:15px;
-width:260px;
-transition:0.3s;
-}
-
-.card:hover{
-transform:translateY(-8px);
-box-shadow:0 10px 25px rgba(0,0,0,0.5);
-}
-
-footer{
-background:#111827;
-padding:30px;
-text-align:center;
-font-size:14px;
-opacity:0.7;
-}
-
 </style>
 </head>
 
 <body>
 
-<nav>
-<div><b>PromptGoAI</b></div>
-<div>
-<a href="chatgpt.html">ChatGPT</a>
-<a href="gemini.html">Gemini</a>
-</div>
-</nav>
+<header>
+    <h1>PromptGoAI</h1>
+    <p>Explore Powerful AI Prompts for ChatGPT & Gemini</p>
+</header>
 
-<div class="hero">
-<h1>Professional AI Prompts for Creators</h1>
-<p>High quality prompts for ChatGPT, Gemini and AI productivity tools.</p>
-
-<a href="chatgpt.html" class="btn primary">Explore Prompts</a>
-<a href="gemini.html" class="btn secondary">View Gemini</a>
+<div class="search-box">
+    <input type="text" id="search" placeholder="Search prompts...">
 </div>
 
-<div class="section">
-<h2>Why Choose PromptGoAI?</h2>
+<div class="container" id="promptContainer">
 
-<div class="grid">
+    <div class="card">
+        <h3>Instagram Caption Generator</h3>
+        <p id="p1">Write 10 viral Instagram captions for a travel photo.</p>
+        <button onclick="copyText('p1')">Copy Prompt</button>
+    </div>
 
-<div class="card">
-<h3>Expert Written Prompts</h3>
-<p>Carefully crafted prompts for powerful AI results.</p>
+    <div class="card">
+        <h3>Blog Writer</h3>
+        <p id="p2">Write a 1000-word SEO blog on AI future trends.</p>
+        <button onclick="copyText('p2')">Copy Prompt</button>
+    </div>
+
+    <div class="card">
+        <h3>Business Idea Generator</h3>
+        <p id="p3">Give me 5 unique online business ideas under $100 budget.</p>
+        <button onclick="copyText('p3')">Copy Prompt</button>
+    </div>
+
 </div>
 
-<div class="card">
-<h3>SEO Optimized</h3>
-<p>Prompts designed for creators and digital growth.</p>
-</div>
+<script>
+function copyText(id) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text);
+    alert("Prompt Copied!");
+}
 
-<div class="card">
-<h3>Free & Easy Access</h3>
-<p>Simple, clean and user friendly interface.</p>
-</div>
-
-</div>
-</div>
-
-<footer>
-© 2026 PromptGoAI | Built for AI Creators
-</footer>
+document.getElementById("search").addEventListener("keyup", function() {
+    let value = this.value.toLowerCase();
+    let cards = document.getElementsByClassName("card");
+    for (let i = 0; i < cards.length; i++) {
+        let text = cards[i].innerText.toLowerCase();
+        cards[i].style.display = text.includes(value) ? "block" : "none";
+    }
+});
+</script>
 
 </body>
 </html>
