@@ -80,11 +80,33 @@ button {
 
 <div class="container" id="promptContainer"></div>
 <script>
+<script>
+fetch('prompts.json')
+  .then(response => response.json())
+  .then(data => {
+    const container = document.getElementById('promptContainer');
+
+    data.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      card.innerHTML = `
+        <h3>${item.title}</h3>
+        <img src="${item.image}" width="100%" style="border-radius:10px;">
+        <p id="prompt${index}">${item.prompt}</p>
+        <button onclick="copyText('prompt${index}')">Copy Prompt</button>
+      `;
+
+      container.appendChild(card);
+    });
+  });
+
 function copyText(id) {
-    const text = document.getElementById(id).innerText;
-    navigator.clipboard.writeText(text);
-    alert("Prompt Copied!");
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text);
+  alert("Prompt Copied!");
 }
+</script>
 </script>
 
 </body>
