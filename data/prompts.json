@@ -1,17 +1,17 @@
 [
   {
-    "title": "Beach Instagram Model",
-"image": "images/beach.jpg"
-    "prompt": "Ultra realistic beach photoshoot of a fashion model at golden sunset, soft natural lighting, DSLR quality, 8k resolution"
+    "title": "Beach Model Prompt",
+    "image": "images/beach.jpg",
+    "prompt": "Ultra realistic beach photoshoot of a fashion model at sunset, cinematic lighting, 8k quality"
   },
   {
-    "title": "Neon Cinematic Portrait",
+    "title": "Neon Rain Portrait",
     "image": "images/neon.jpg",
-    "prompt": "Cinematic portrait of a man standing in neon rain city at night, 85mm lens, shallow depth of field, ultra realistic, 8k"
+    "prompt": "Cinematic neon rain portrait of a man standing in city street at night, 85mm lens, ultra realistic"
   },
   {
-    "title": "Fantasy Warrior Princess",
+    "title": "Fantasy Warrior",
     "image": "images/warrior.jpg",
-    "prompt": "Epic fantasy warrior princess holding sword, golden armor, dramatic lighting, ultra detailed, 8k fantasy art"
+    "prompt": "Epic fantasy warrior princess holding sword, golden armor, cinematic lighting, 8k detailed art"
   }
 ]
