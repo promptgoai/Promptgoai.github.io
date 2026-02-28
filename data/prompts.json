@@ -1,0 +1,17 @@
+[
+  {
+    "title": "Beach Instagram Model",
+    "image": "images/beach.jpg",
+    "prompt": "Ultra realistic beach photoshoot of a fashion model at golden sunset, soft natural lighting, DSLR quality, 8k resolution"
+  },
+  {
+    "title": "Neon Cinematic Portrait",
+    "image": "images/neon.jpg",
+    "prompt": "Cinematic portrait of a man standing in neon rain city at night, 85mm lens, shallow depth of field, ultra realistic, 8k"
+  },
+  {
+    "title": "Fantasy Warrior Princess",
+    "image": "images/warrior.jpg",
+    "prompt": "Epic fantasy warrior princess holding sword, golden armor, dramatic lighting, ultra detailed, 8k fantasy art"
+  }
+]
