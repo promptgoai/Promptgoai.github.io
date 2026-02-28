@@ -3,155 +3,170 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PromptGoAI - Premium AI Prompts</title>
+<title>PromptGoAI - Premium AI Prompt Platform</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0f172a;
-    color: white;
+
+/* RESET */
+*{
+scroll-behavior:smooth;
+margin:0;
+font-family: Arial, sans-serif;
 }
 
-/* Navbar */
-nav {
-    background: #111827;
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* BODY */
+body{
+background:#0f172a;
+color:white;
 }
 
-nav h2 {
-    margin: 0;
+/* NAVBAR */
+nav{
+position:sticky;
+top:0;
+background:#111827;
+padding:15px 40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+z-index:100;
 }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
-    font-size: 15px;
+nav a{
+color:white;
+text-decoration:none;
+margin-left:25px;
 }
 
-nav a:hover {
-    color: #3b82f6;
+/* HERO */
+.hero{
+text-align:center;
+padding:120px 20px;
+background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
 }
 
-/* Hero */
-header {
-    padding: 60px 20px;
-    text-align: center;
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
+.hero h1{
+font-size:50px;
+margin-bottom:20px;
 }
 
-header h1 {
-    font-size: 40px;
+.hero p{
+opacity:0.9;
+font-size:18px;
+margin-bottom:30px;
 }
 
-header p {
-    opacity: 0.9;
+/* BUTTON */
+.btn-glow{
+padding:14px 32px;
+border-radius:30px;
+background:linear-gradient(45deg,#3b82f6,#7c3aed,#ec4899);
+color:white;
+text-decoration:none;
+font-weight:bold;
+transition:0.4s;
+display:inline-block;
 }
 
-/* Sections */
-section {
-    padding: 40px 20px;
-    text-align: center;
+.btn-glow:hover{
+transform:scale(1.1);
+box-shadow:0 0 25px rgba(59,130,246,0.6);
 }
 
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+/* SECTIONS */
+.section{
+padding:80px 20px;
+text-align:center;
 }
 
-.card {
-    background: #1e293b;
-    width: 280px;
-    margin: 15px;
-    padding: 20px;
-    border-radius: 12px;
-    transition: 0.3s;
+.container{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:25px;
 }
 
-.card:hover {
-    transform: translateY(-5px);
+/* CARD */
+.card{
+background:#1e293b;
+width:280px;
+padding:25px;
+border-radius:15px;
+transition:0.35s;
 }
 
-button {
-    margin-top: 10px;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 6px;
-    background: #2563eb;
-    color: white;
-    cursor: pointer;
+.card:hover{
+transform:translateY(-8px) scale(1.03);
+box-shadow:0 15px 30px rgba(0,0,0,0.4);
 }
 
-button:hover {
-    background: #1d4ed8;
+.card img{
+width:100%;
+border-radius:12px;
+margin-bottom:10px;
 }
 
-footer {
-    background: #111827;
-    text-align: center;
-    padding: 20px;
-    margin-top: 30px;
-    font-size: 14px;
-    opacity: 0.7;
+/* FOOTER */
+footer{
+background:#111827;
+padding:30px;
+text-align:center;
+opacity:0.7;
+margin-top:40px;
 }
+
 </style>
 </head>
 
 <body>
 
 <nav>
-    <h2>PromptGoAI</h2>
-    <div>
-        <a href="#">Home</a>
-        <a href="#chatgpt">ChatGPT</a>
-        <a href="#gemini">Gemini</a>
+<div><b>PromptGoAI</b></div>
+<div>
+<a href="index.html">Home</a>
 <a href="all-prompts.html">All Prompts</a>
-    </div>
+</div>
 </nav>
 
-<header>
-    <h1>Premium AI Prompts Platform</h1>
-    <p>Explore powerful prompts for ChatGPT & Gemini</p>
-</header>
+<div class="hero">
+<h1>Best AI Prompt Platform</h1>
+<p>High Quality Prompts for Creators, Students & Developers</p>
 
-<section id="chatgpt">
-    <h2>ChatGPT Prompts</h2>
-    <div class="container">
-        <div class="card">
-            <h3>Instagram Caption</h3>
-            <p id="c1">Write 10 viral Instagram captions for a travel photo.</p>
-            <button onclick="copyText('c1')">Copy Prompt</button>
-        </div>
-    </div>
-</section>
+<a class="btn-glow" href="all-prompts.html">
+Explore Prompts
+</a>
+</div>
 
-<section id="gemini">
-    <h2>Gemini Prompts</h2>
-    <div class="container">
-        <div class="card">
-            <h3>Business Idea Generator</h3>
-            <p id="g1">Give me 5 profitable AI startup ideas for 2026.</p>
-            <button onclick="copyText('g1')">Copy Prompt</button>
-        </div>
-    </div>
-</section>
+<div class="section">
+<h2>Popular Prompts</h2>
+<br>
+
+<div class="container">
+
+<div class="card">
+<img src="images/beach.jpg">
+<h3>Beach Model Prompt</h3>
+<p>Ultra realistic beach photoshoot prompt.</p>
+</div>
+
+<div class="card">
+<img src="images/neon.jpg">
+<h3>Neon Portrait Prompt</h3>
+<p>Cinematic neon rain portrait prompt.</p>
+</div>
+
+<div class="card">
+<img src="images/warrior.jpg">
+<h3>Fantasy Warrior Prompt</h3>
+<p>Epic fantasy AI art prompt.</p>
+</div>
+
+</div>
+</div>
 
 <footer>
-    © 2026 PromptGoAI | Built for AI Creators
+© 2026 PromptGoAI | AI Prompt Platform
 </footer>
-
-<script>
-function copyText(id) {
-    const text = document.getElementById(id).innerText;
-    navigator.clipboard.writeText(text);
-    alert("Prompt Copied!");
-}
-</script>
 
 </body>
 </html>
