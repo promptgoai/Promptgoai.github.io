@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,74 +7,59 @@
 
 <style>
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0f172a;
-    color: white;
+  margin: 0;
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
 }
 
 nav {
-    background: #111827;
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  background: #111827;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
 }
 
 nav a {
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
+  color: white;
+  text-decoration: none;
 }
 
 header {
-    text-align: center;
-    padding: 50px 20px;
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
-}
-
-header h1 {
-    margin: 0;
+  text-align: center;
+  padding: 50px 20px;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
 }
 
 .container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
 }
 
 .card {
-    background: #1e293b;
-    width: 280px;
-    margin: 15px;
-    padding: 20px;
-    border-radius: 12px;
-    transition: 0.3s;
-}
-
-.card:hover {
-    transform: translateY(-5px);
+  background: #1e293b;
+  width: 280px;
+  margin: 15px;
+  padding: 20px;
+  border-radius: 12px;
 }
 
 .card img {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 10px;
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
 button {
-    margin-top: 10px;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 6px;
-    background: #2563eb;
-    color: white;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #1d4ed8;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
 }
 </style>
 </head>
@@ -82,41 +67,43 @@ button:hover {
 <body>
 
 <nav>
-    <div>PromptGoAI</div>
-    <div>
-        <a href="index.html">Home</a>
-    </div>
+  <div>PromptGoAI</div>
+  <a href="index.html">Home</a>
 </nav>
 
 <header>
-    <h1>All AI Image Prompts</h1>
-    <p>Explore Instagram, Cinematic & Fantasy AI Prompts</p>
+  <h1>All AI Image Prompts</h1>
+  <p>Instagram • Cinematic • Fantasy</p>
 </header>
 
 <div class="container" id="promptContainer"></div>
 
 <script>
-fetch('prompts.json')
-  .then(response => response.json())
-  .then(data => {
-    const container = document.getElementById('promptContainer');
+fetch('data/prompts.json')
+.then(response => response.json())
+.then(data => {
+  const container = document.getElementById("promptContainer");
 
-    data.forEach((item, index) => {
-      const card = document.createElement('div');
-      card.className = 'card';
+  data.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "card";
 
-      card.innerHTML = `
-        <h3>${item.title}</h3>
-        <img src="${item.image}">
-        <p id="prompt${index}">${item.prompt}</p>
-        <button onclick="copyText('prompt${index}')">Copy Prompt</button>
-      `;
+    card.innerHTML = `
+      <h3>${item.title}</h3>
+      <img src="${item.image}">
+      <p id="p${index}">${item.prompt}</p>
+      <button onclick="copyPrompt('p${index}')">Copy Prompt</button>
+    `;
 
-      container.appendChild(card);
-    });
+    container.appendChild(card);
   });
+})
+.catch(error => {
+  document.getElementById("promptContainer").innerHTML =
+  "<p style='color:red;text-align:center;'>Error loading prompts</p>";
+});
 
-function copyText(id) {
+function copyPrompt(id) {
   const text = document.getElementById(id).innerText;
   navigator.clipboard.writeText(text);
   alert("Prompt Copied!");
