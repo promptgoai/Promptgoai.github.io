@@ -6,8 +6,79 @@
 <title>All AI Prompts - PromptGoAI</title>
 
 <style>
-body <div class="container" id="promptContainer"></div>
-    
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+}
+
+nav {
+    background: #111827;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+header {
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+
+header h1 {
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card {
+    background: #1e293b;
+    width: 280px;
+    margin: 15px;
+    padding: 20px;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+</style>
+</head>
+
 <body>
 
 <nav>
@@ -18,12 +89,12 @@ body <div class="container" id="promptContainer"></div>
 </nav>
 
 <header>
-    <h1>All AI Prompts</h1>
-    <p>Explore Powerful Prompts for Content, Business, Study & Coding</p>
+    <h1>All AI Image Prompts</h1>
+    <p>Explore Instagram, Cinematic & Fantasy AI Prompts</p>
 </header>
 
 <div class="container" id="promptContainer"></div>
-<script>
+
 <script>
 fetch('prompts.json')
   .then(response => response.json())
@@ -36,7 +107,7 @@ fetch('prompts.json')
 
       card.innerHTML = `
         <h3>${item.title}</h3>
-        <img src="${item.image}" width="100%" style="border-radius:10px;">
+        <img src="${item.image}">
         <p id="prompt${index}">${item.prompt}</p>
         <button onclick="copyText('prompt${index}')">Copy Prompt</button>
       `;
@@ -50,7 +121,6 @@ function copyText(id) {
   navigator.clipboard.writeText(text);
   alert("Prompt Copied!");
 }
-</script>
 </script>
 
 </body>
