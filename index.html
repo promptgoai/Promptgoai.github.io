@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PromptGoAI - Best AI Prompts</title>
+<title>PromptGoAI - Premium AI Prompts</title>
 
 <style>
 body {
@@ -13,6 +13,31 @@ body {
     color: white;
 }
 
+/* Navbar */
+nav {
+    background: #111827;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav h2 {
+    margin: 0;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 15px;
+}
+
+nav a:hover {
+    color: #3b82f6;
+}
+
+/* Hero */
 header {
     padding: 60px 20px;
     text-align: center;
@@ -21,38 +46,27 @@ header {
 
 header h1 {
     font-size: 40px;
-    margin-bottom: 10px;
 }
 
 header p {
-    font-size: 18px;
     opacity: 0.9;
 }
 
-.search-box {
+/* Sections */
+section {
+    padding: 40px 20px;
     text-align: center;
-    margin: 30px;
-}
-
-.search-box input {
-    width: 80%;
-    max-width: 400px;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    font-size: 16px;
 }
 
 .container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 20px;
 }
 
 .card {
     background: #1e293b;
-    width: 300px;
+    width: 280px;
     margin: 15px;
     padding: 20px;
     border-radius: 12px;
@@ -61,10 +75,6 @@ header p {
 
 .card:hover {
     transform: translateY(-5px);
-}
-
-.card h3 {
-    margin-top: 0;
 }
 
 button {
@@ -80,41 +90,59 @@ button {
 button:hover {
     background: #1d4ed8;
 }
+
+footer {
+    background: #111827;
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    font-size: 14px;
+    opacity: 0.7;
+}
 </style>
 </head>
 
 <body>
 
+<nav>
+    <h2>PromptGoAI</h2>
+    <div>
+        <a href="#">Home</a>
+        <a href="#chatgpt">ChatGPT</a>
+        <a href="#gemini">Gemini</a>
+    </div>
+</nav>
+
 <header>
-    <h1>PromptGoAI</h1>
-    <p>Explore Powerful AI Prompts for ChatGPT & Gemini</p>
+    <h1>Premium AI Prompts Platform</h1>
+    <p>Explore powerful prompts for ChatGPT & Gemini</p>
 </header>
 
-<div class="search-box">
-    <input type="text" id="search" placeholder="Search prompts...">
-</div>
-
-<div class="container" id="promptContainer">
-
-    <div class="card">
-        <h3>Instagram Caption Generator</h3>
-        <p id="p1">Write 10 viral Instagram captions for a travel photo.</p>
-        <button onclick="copyText('p1')">Copy Prompt</button>
+<section id="chatgpt">
+    <h2>ChatGPT Prompts</h2>
+    <div class="container">
+        <div class="card">
+            <h3>Instagram Caption</h3>
+            <p id="c1">Write 10 viral Instagram captions for a travel photo.</p>
+            <button onclick="copyText('c1')">Copy Prompt</button>
+        </div>
     </div>
+</section>
 
-    <div class="card">
-        <h3>Blog Writer</h3>
-        <p id="p2">Write a 1000-word SEO blog on AI future trends.</p>
-        <button onclick="copyText('p2')">Copy Prompt</button>
+<section id="gemini">
+    <h2>Gemini Prompts</h2>
+    <div class="container">
+        <div class="card">
+            <h3>Business Idea Generator</h3>
+            <p id="g1">Give me 5 profitable AI startup ideas for 2026.</p>
+            <button onclick="copyText('g1')">Copy Prompt</button>
+        </div>
     </div>
+</section>
 
-    <div class="card">
-        <h3>Business Idea Generator</h3>
-        <p id="p3">Give me 5 unique online business ideas under $100 budget.</p>
-        <button onclick="copyText('p3')">Copy Prompt</button>
-    </div>
-
-</div>
+<footer>
+    © 2026 PromptGoAI | Built for AI Creators
+</footer>
 
 <script>
 function copyText(id) {
@@ -122,15 +150,6 @@ function copyText(id) {
     navigator.clipboard.writeText(text);
     alert("Prompt Copied!");
 }
-
-document.getElementById("search").addEventListener("keyup", function() {
-    let value = this.value.toLowerCase();
-    let cards = document.getElementsByClassName("card");
-    for (let i = 0; i < cards.length; i++) {
-        let text = cards[i].innerText.toLowerCase();
-        cards[i].style.display = text.includes(value) ? "block" : "none";
-    }
-});
 </script>
 
 </body>
