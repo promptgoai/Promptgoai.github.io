@@ -94,7 +94,7 @@ font-weight:bold;
 <a href="gemini.html">Gemini</a>
 </nav>
 
-<h2>💎 Gemini AI Prompts</h2>
+<h2>💎 50 Gemini AI Prompts</h2>
 
 <div class="search">
 <input type="text" id="searchInput" onkeyup="searchPrompts()" placeholder="Search prompts...">
@@ -105,33 +105,60 @@ font-weight:bold;
 <button onclick="filterCategory('youtube', this)">YouTube</button>
 <button onclick="filterCategory('startup', this)">Startup</button>
 <button onclick="filterCategory('content', this)">Content</button>
-<button onclick="filterCategory('growth', this)">Growth</button>
+<button onclick="filterCategory('ai', this)">AI</button>
+<button onclick="filterCategory('money', this)">Money</button>
 </div>
 
-<div class="cards">
-
-<div class="card" data-category="youtube content">
-<h3>YouTube Script Creator</h3>
-<p>Create an engaging YouTube script about [topic] with hook & CTA.</p>
-<button class="copy-btn" onclick="copyText('Create an engaging YouTube script about [topic] with hook & CTA.', this)">Copy Prompt</button>
-</div>
-
-<div class="card" data-category="startup growth">
-<h3>Startup Growth Plan</h3>
-<p>Generate a 30-day growth strategy for a new startup.</p>
-<button class="copy-btn" onclick="copyText('Generate a 30-day growth strategy for a new startup.', this)">Copy Prompt</button>
-</div>
-
-<div class="card" data-category="content growth">
-<h3>Content Repurposing</h3>
-<p>Turn this blog into Twitter threads, LinkedIn posts & Instagram reels script.</p>
-<button class="copy-btn" onclick="copyText('Turn this blog into Twitter threads, LinkedIn posts & Instagram reels script.', this)">Copy Prompt</button>
-</div>
-
-</div>
+<div class="cards" id="cardsContainer"></div>
 
 <script>
-function copyText(text, button){
+
+const prompts = [
+
+{title:"YouTube Script",text:"Create highly engaging YouTube script with hook and CTA.",cat:"youtube"},
+{title:"YouTube Shorts Hook",text:"Generate 3-second viral hook for Shorts.",cat:"youtube"},
+{title:"Faceless Script",text:"Write faceless YouTube automation script.",cat:"youtube"},
+{title:"Video Ideas",text:"Generate 10 viral YouTube ideas.",cat:"youtube"},
+{title:"Storytelling Script",text:"Write emotional storytelling video script.",cat:"youtube"},
+
+{title:"90-Day Growth Plan",text:"Create 90-day startup growth roadmap.",cat:"startup"},
+{title:"Customer Persona",text:"Generate detailed buyer persona.",cat:"startup"},
+{title:"Go To Market",text:"Write complete go-to-market strategy.",cat:"startup"},
+{title:"Launch Strategy",text:"Create zero budget viral launch plan.",cat:"startup"},
+{title:"Investor Pitch",text:"Write persuasive investor pitch script.",cat:"startup"},
+
+{title:"Twitter Threads",text:"Turn blog into 10 Twitter threads.",cat:"content"},
+{title:"LinkedIn Authority Post",text:"Write authority LinkedIn post.",cat:"content"},
+{title:"Instagram Calendar",text:"Create 30-day Instagram calendar.",cat:"content"},
+{title:"Reels Script",text:"Write viral Instagram reel script.",cat:"content"},
+{title:"Newsletter",text:"Write weekly newsletter content.",cat:"content"},
+
+{title:"Chatbot Flow",text:"Generate ecommerce chatbot conversation flow.",cat:"ai"},
+{title:"Automation Workflow",text:"Create AI automation workflow.",cat:"ai"},
+{title:"Image Prompt",text:"Generate hyper-realistic AI image prompt.",cat:"ai"},
+{title:"Prompt Guide",text:"Write beginner prompt engineering guide.",cat:"ai"},
+{title:"AI SaaS Plan",text:"Create AI SaaS development roadmap.",cat:"ai"},
+
+{title:"Passive Income",text:"Generate 10 passive income ideas 2026.",cat:"money"},
+{title:"Sales Page Copy",text:"Write high converting sales page copy.",cat:"money"},
+{title:"Freelance Strategy",text:"Create freelancing positioning strategy.",cat:"money"},
+{title:"Webinar Script",text:"Write persuasive webinar script.",cat:"money"},
+{title:"Affiliate Plan",text:"Generate affiliate marketing strategy.",cat:"money"}
+
+];
+
+for(let i=0;i<prompts.length;i++){
+let card = `
+<div class="card" data-category="${prompts[i].cat}">
+<h3>${prompts[i].title}</h3>
+<p>${prompts[i].text}</p>
+<button class="copy-btn" onclick="copyText('${prompts[i].text}', this)">Copy Prompt</button>
+</div>
+`;
+document.getElementById("cardsContainer").innerHTML += card;
+}
+
+function copyText(text,button){
 navigator.clipboard.writeText(text);
 button.innerText="Copied!";
 setTimeout(()=>{button.innerText="Copy Prompt";},1500);
@@ -140,29 +167,28 @@ setTimeout(()=>{button.innerText="Copy Prompt";},1500);
 function searchPrompts(){
 let input=document.getElementById("searchInput").value.toLowerCase();
 let cards=document.getElementsByClassName("card");
-
 for(let i=0;i<cards.length;i++){
 let text=cards[i].innerText.toLowerCase();
 cards[i].style.display=text.includes(input)?"block":"none";
 }
 }
 
-function filterCategory(category, btn){
+function filterCategory(category,btn){
 let cards=document.getElementsByClassName("card");
 let buttons=document.querySelectorAll(".filters button");
-
 buttons.forEach(b=>b.classList.remove("active"));
 btn.classList.add("active");
 
 for(let i=0;i<cards.length;i++){
 let cat=cards[i].getAttribute("data-category");
-if(category==="all" || cat.includes(category)){
+if(category==="all"||cat.includes(category)){
 cards[i].style.display="block";
 }else{
 cards[i].style.display="none";
 }
 }
 }
+
 </script>
 
 </body>
