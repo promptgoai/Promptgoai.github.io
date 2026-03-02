@@ -1,30 +1,102 @@
-<section id="gemini">
-    <h2>Gemini Prompts</h2>
-    <div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini Prompts - PromptGoAI</title>
 
-        <div class="card">
-            <h3>Market Research Prompt</h3>
-            <p id="g1">Perform detailed market research for launching an online AI tool in India.</p>
-            <button onclick="copyText('g1')">Copy Prompt</button>
-        </div>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{background:#0f172a;color:white;}
 
-        <div class="card">
-            <h3>AI Startup Ideas</h3>
-            <p id="g2">Generate 10 profitable AI startup ideas for 2026 with clear revenue strategy.</p>
-            <button onclick="copyText('g2')">Copy Prompt</button>
-        </div>
+nav{
+display:flex;justify-content:space-between;align-items:center;
+padding:20px 8%;background:#0b1220;
+}
+nav h1{color:#38bdf8;}
+nav ul{display:flex;gap:20px;list-style:none;}
+nav ul li a{color:white;text-decoration:none;font-weight:bold;}
 
-        <div class="card">
-            <h3>Pitch Deck Creator</h3>
-            <p id="g3">Create a professional investor pitch deck outline for a tech startup.</p>
-            <button onclick="copyText('g3')">Copy Prompt</button>
-        </div>
+.section{padding:80px 8%;text-align:center;}
+.section h2{font-size:36px;margin-bottom:40px;}
 
-        <div class="card">
-            <h3>Code Debug Helper</h3>
-            <p id="g4">Analyze and fix errors in the given HTML, CSS, or JavaScript code.</p>
-            <button onclick="copyText('g4')">Copy Prompt</button>
-        </div>
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+}
 
-    </div>
+.card{
+background:linear-gradient(145deg,#1e293b,#0f172a);
+padding:30px;border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+transition:0.3s;
+}
+.card:hover{transform:translateY(-8px);}
+.card h3{color:#38bdf8;margin-bottom:15px;}
+.card p{color:#cbd5e1;margin-bottom:20px;}
+
+.btn{
+display:inline-block;
+padding:10px 25px;
+background:#38bdf8;
+color:#0f172a;
+border-radius:25px;
+text-decoration:none;
+font-weight:bold;
+}
+
+footer{
+background:#0b1220;
+padding:20px;
+text-align:center;
+color:#94a3b8;
+margin-top:60px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<h1>PromptGoAI</h1>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="chatgpt.html">ChatGPT</a></li>
+<li><a href="gemini.html">Gemini</a></li>
+<li><a href="all-prompts.html">All Prompts</a></li>
+</ul>
+</nav>
+
+<section class="section">
+<h2>💎 Gemini AI Prompts Collection</h2>
+
+<div class="cards">
+
+<div class="card">
+<h3>YouTube Script Creator</h3>
+<p>Create an engaging YouTube script about [topic] with hook & CTA.</p>
+<a href="#" class="btn">Copy Prompt</a>
+</div>
+
+<div class="card">
+<h3>Startup Growth Plan</h3>
+<p>Generate a 30-day growth plan for a new startup.</p>
+<a href="#" class="btn">Copy Prompt</a>
+</div>
+
+<div class="card">
+<h3>Content Repurposing Prompt</h3>
+<p>Turn this blog into Twitter threads, LinkedIn posts & reels script.</p>
+<a href="#" class="btn">Copy Prompt</a>
+</div>
+
+</div>
 </section>
+
+<footer>
+© 2026 PromptGoAI | Built with ❤️ by Arsh
+</footer>
+
+</body>
+</html>
