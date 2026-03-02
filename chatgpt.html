@@ -94,7 +94,7 @@ font-weight:bold;
 <a href="gemini.html">Gemini</a>
 </nav>
 
-<h2>🔥 ChatGPT Prompts</h2>
+<h2>🔥 50 ChatGPT Prompts Collection</h2>
 
 <div class="search">
 <input type="text" id="searchInput" onkeyup="searchPrompts()" placeholder="Search prompts...">
@@ -106,32 +106,60 @@ font-weight:bold;
 <button onclick="filterCategory('business', this)">Business</button>
 <button onclick="filterCategory('social', this)">Social</button>
 <button onclick="filterCategory('startup', this)">Startup</button>
+<button onclick="filterCategory('ai', this)">AI</button>
 </div>
 
-<div class="cards">
-
-<div class="card" data-category="seo">
-<h3>SEO Blog Writer</h3>
-<p>Write a high-ranking SEO optimized blog post about [topic].</p>
-<button class="copy-btn" onclick="copyText('Write a high-ranking SEO optimized blog post about [topic].', this)">Copy Prompt</button>
-</div>
-
-<div class="card" data-category="business startup">
-<h3>Business Idea Generator</h3>
-<p>Generate 10 profitable online business ideas with low investment.</p>
-<button class="copy-btn" onclick="copyText('Generate 10 profitable online business ideas with low investment.', this)">Copy Prompt</button>
-</div>
-
-<div class="card" data-category="social">
-<h3>Instagram Caption Creator</h3>
-<p>Create viral Instagram captions for [niche].</p>
-<button class="copy-btn" onclick="copyText('Create viral Instagram captions for [niche].', this)">Copy Prompt</button>
-</div>
-
+<div class="cards" id="cardsContainer">
 </div>
 
 <script>
-function copyText(text, button){
+
+const prompts = [
+
+{title:"SEO Blog Post",text:"Write a complete SEO optimized blog post about [topic] with headings and FAQs.",cat:"seo"},
+{title:"Long Tail Keywords",text:"Generate 20 long-tail keywords for [niche].",cat:"seo"},
+{title:"Content Calendar",text:"Create 30-day SEO content calendar for [niche].",cat:"seo"},
+{title:"Meta Titles",text:"Generate high CTR meta titles for [keyword].",cat:"seo"},
+{title:"SEO Audit",text:"Write full SEO audit checklist.",cat:"seo"},
+
+{title:"Business Ideas",text:"Generate 10 low investment online business ideas.",cat:"business"},
+{title:"Business Plan",text:"Create complete business plan for [startup].",cat:"business"},
+{title:"Pitch Deck",text:"Write investor pitch deck outline.",cat:"business"},
+{title:"Revenue Model",text:"Generate revenue streams for digital product.",cat:"business"},
+{title:"Cold Email",text:"Write cold email template for clients.",cat:"business"},
+
+{title:"Instagram Captions",text:"Create 10 viral Instagram captions for [niche].",cat:"social"},
+{title:"Twitter Thread",text:"Write viral Twitter thread about [topic].",cat:"social"},
+{title:"LinkedIn Post",text:"Create authority LinkedIn post for [industry].",cat:"social"},
+{title:"Reels Hooks",text:"Generate hooks for Instagram reels.",cat:"social"},
+{title:"YouTube Description",text:"Write SEO optimized YouTube description.",cat:"social"},
+
+{title:"Startup Growth Plan",text:"Create 30-day startup growth plan.",cat:"startup"},
+{title:"Customer Acquisition",text:"Generate zero budget customer acquisition ideas.",cat:"startup"},
+{title:"Product Launch",text:"Create product launch roadmap.",cat:"startup"},
+{title:"Growth Hacks",text:"Generate growth hacking ideas for [industry].",cat:"startup"},
+{title:"Retention Strategy",text:"Write subscription app retention strategy.",cat:"startup"},
+
+{title:"Rewrite Content",text:"Rewrite this paragraph in persuasive tone.",cat:"ai"},
+{title:"Image Prompt",text:"Create AI image prompt for realistic portrait.",cat:"ai"},
+{title:"Chatbot Flow",text:"Generate chatbot conversation flow.",cat:"ai"},
+{title:"Video Script",text:"Write educational YouTube script.",cat:"ai"},
+{title:"Landing Page",text:"Write landing page copy for [product].",cat:"ai"}
+
+];
+
+for(let i=0;i<prompts.length;i++){
+let card = `
+<div class="card" data-category="${prompts[i].cat}">
+<h3>${prompts[i].title}</h3>
+<p>${prompts[i].text}</p>
+<button class="copy-btn" onclick="copyText('${prompts[i].text}', this)">Copy Prompt</button>
+</div>
+`;
+document.getElementById("cardsContainer").innerHTML += card;
+}
+
+function copyText(text,button){
 navigator.clipboard.writeText(text);
 button.innerText="Copied!";
 setTimeout(()=>{button.innerText="Copy Prompt";},1500);
@@ -140,29 +168,28 @@ setTimeout(()=>{button.innerText="Copy Prompt";},1500);
 function searchPrompts(){
 let input=document.getElementById("searchInput").value.toLowerCase();
 let cards=document.getElementsByClassName("card");
-
 for(let i=0;i<cards.length;i++){
 let text=cards[i].innerText.toLowerCase();
 cards[i].style.display=text.includes(input)?"block":"none";
 }
 }
 
-function filterCategory(category, btn){
+function filterCategory(category,btn){
 let cards=document.getElementsByClassName("card");
 let buttons=document.querySelectorAll(".filters button");
-
 buttons.forEach(b=>b.classList.remove("active"));
 btn.classList.add("active");
 
 for(let i=0;i<cards.length;i++){
 let cat=cards[i].getAttribute("data-category");
-if(category==="all" || cat.includes(category)){
+if(category==="all"||cat.includes(category)){
 cards[i].style.display="block";
 }else{
 cards[i].style.display="none";
 }
 }
 }
+
 </script>
 
 </body>
