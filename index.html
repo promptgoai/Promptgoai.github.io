@@ -3,172 +3,172 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PromptGoAI - AI Prompt Platform</title>
+<title>PromptGoAI - Best AI Prompt Platform</title>
 
 <style>
-
-/* RESET */
 *{
-scroll-behavior:smooth;
 margin:0;
-font-family: Arial, sans-serif;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
 }
 
-/* BODY */
 body{
 background:#0f172a;
 color:white;
 }
 
-/* NAVBAR */
+/* Navbar */
 nav{
-position:sticky;
-top:0;
-background:#111827;
-padding:15px 40px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-z-index:100;
+padding:20px 8%;
+background:#0b1220;
+position:sticky;
+top:0;
 }
 
-nav a{
+nav h1{
+color:#38bdf8;
+}
+
+nav ul{
+display:flex;
+gap:20px;
+list-style:none;
+}
+
+nav ul li a{
 color:white;
 text-decoration:none;
-margin-left:25px;
-font-size:15px;
+font-weight:bold;
 }
 
-/* HERO */
+/* Hero Section */
 .hero{
+height:90vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 text-align:center;
-padding:120px 20px;
-background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+padding:0 20px;
+background:linear-gradient(135deg,#4f46e5,#9333ea,#ec4899);
 }
 
-.hero h1{
-font-size:52px;
+.hero h2{
+font-size:48px;
 margin-bottom:20px;
 }
 
 .hero p{
-font-size:18px;
-opacity:0.9;
+font-size:20px;
 margin-bottom:30px;
 }
 
-/* BUTTON */
-.btn-glow{
-padding:14px 32px;
+.btn{
+padding:12px 30px;
+background:white;
+color:#4f46e5;
 border-radius:30px;
-background:linear-gradient(45deg,#3b82f6,#7c3aed,#ec4899);
-color:white;
 text-decoration:none;
 font-weight:bold;
-transition:0.4s;
-display:inline-block;
 }
 
-.btn-glow:hover{
-transform:scale(1.1);
-box-shadow:0 0 25px rgba(59,130,246,0.6);
-}
-
-/* SECTIONS */
+/* Section */
 .section{
-padding:80px 20px;
+padding:70px 8%;
 text-align:center;
 }
 
-.container{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
+.section h2{
+margin-bottom:40px;
+font-size:32px;
+}
+
+/* Cards */
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:25px;
 }
 
-/* CARD */
 .card{
 background:#1e293b;
-width:280px;
-padding:25px;
+padding:30px;
 border-radius:15px;
-transition:0.35s;
+transition:0.3s;
 }
 
 .card:hover{
-transform:translateY(-8px) scale(1.03);
-box-shadow:0 15px 30px rgba(0,0,0,0.4);
+transform:translateY(-10px);
 }
 
-.card img{
-width:100%;
-border-radius:12px;
-margin-bottom:10px;
+.card h3{
+margin-bottom:15px;
+color:#38bdf8;
 }
 
-/* FOOTER */
 footer{
-background:#111827;
-padding:30px;
+background:#0b1220;
+padding:20px;
 text-align:center;
-opacity:0.7;
-margin-top:40px;
+margin-top:50px;
+color:#94a3b8;
 }
-
 </style>
 </head>
 
 <body>
 
 <nav>
-<div><b>PromptGoAI</b></div>
-
-<div>
-<a href="index.html">Home</a>
-<a href="all-prompts.html">All Prompts</a>
-</div>
+<h1>PromptGoAI</h1>
+<ul>
+<li><a href="#">Home</a></li>
+<li><a href="#">ChatGPT Prompts</a></li>
+<li><a href="#">Gemini Prompts</a></li>
+<li><a href="#">All Prompts</a></li>
+</ul>
 </nav>
 
-<div class="hero">
-<h1>Best AI Prompt Platform</h1>
+<section class="hero">
+<h2>Best AI Prompt Platform</h2>
 <p>High Quality Prompts for Creators, Students & Developers</p>
+<a href="#" class="btn">Explore Prompts</a>
+</section>
 
-<a class="btn-glow" href="all-prompts.html">
-Explore Prompts
-</a>
-</div>
+<section class="section">
+<h2>🔥 Popular Prompt Categories</h2>
 
-<div class="section">
-<h2>Popular Prompts</h2>
-<br>
-
-<div class="container">
+<div class="cards">
 
 <div class="card">
-<img src="images/beach.jpg">
-<h3>Instagram Model Prompt</h3>
-<p>Cinematic beach photoshoot prompt.</p>
+<h3>ChatGPT Prompts</h3>
+<p>Ready-to-use powerful prompts for ChatGPT productivity & content creation.</p>
 </div>
 
 <div class="card">
-<img src="images/neon.jpg">
-<h3>Neon Portrait Prompt</h3>
-<p>Ultra realistic neon rain portrait prompt.</p>
+<h3>Gemini Prompts</h3>
+<p>Optimized prompts specially designed for Google Gemini AI model.</p>
 </div>
 
 <div class="card">
-<img src="images/warrior.jpg">
-<h3>Fantasy Warrior Prompt</h3>
-<p>Epic fantasy AI art prompt.</p>
+<h3>Instagram Model Prompts</h3>
+<p>Cinematic & viral style AI prompts for social media creators.</p>
+</div>
+
+<div class="card">
+<h3>Business Prompts</h3>
+<p>Startup, marketing & income generating AI prompt collections.</p>
 </div>
 
 </div>
-</div>
+</section>
 
 <footer>
-© 2026 PromptGoAI | AI Prompt Platform
+© 2026 PromptGoAI | Built with ❤️ by Arsh
 </footer>
-<!-- rebuild sync -->
+
 </body>
 </html>
