@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>All Prompts - PromptGoAI</title>
 
 <style>
@@ -78,10 +77,10 @@ padding:10px 20px;
 background:#38bdf8;
 color:#0f172a;
 border-radius:25px;
-text-decoration:none;
 font-weight:bold;
 margin-top:12px;
 cursor:pointer;
+border:none;
 }
 
 footer{
@@ -110,6 +109,13 @@ margin-top:60px;
 
 <h2>🚀 All AI Prompts</h2>
 
+<div style="margin-bottom:25px;">
+<button class="btn" onclick="loadCategory('all')">All</button>
+<button class="btn" onclick="loadCategory('gemini')">Gemini</button>
+<button class="btn" onclick="loadCategory('chatgpt')">ChatGPT</button>
+<button class="btn" onclick="loadCategory('business')">Business</button>
+</div>
+
 <div class="cards" id="promptList"></div>
 
 </section>
@@ -118,15 +124,13 @@ margin-top:60px;
 © 2026 PromptGoAI | Built with ❤️ by Arsh
 </footer>
 
-<!-- Firebase Script -->
-
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyAbTMOKPD5_YE0Z0iKNdZvl_40plYxCyug",
+apiKey: "AIzaSyAbTMOKPD5_YE0Z0I2pl40plYxCyug",
 authDomain: "promptgoai.firebaseapp.com",
 projectId: "promptgoai",
 storageBucket: "promptgoai.firebasestorage.app",
@@ -137,12 +141,47 @@ appId: "1:500683349924:web:a34bdeba6954ec69272b31"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-async function loadPrompts(){
+/* Category Loader */
+
+window.loadCategory = async function(cat){
 
 const promptList = document.getElementById("promptList");
 
 promptList.innerHTML="";
 
-const querySnapshot = await getDocs(collection(db,"prompts"));
+let q;
 
-querySnapshot.forEach
+if(cat === "all"){
+q = query(collection(db,"prompts"));
+}else{
+q = query(collection(db,"prompts"), where("category","==",cat));
+}
+
+const snapshot = await getDocs(q);
+
+snapshot.forEach(doc=>{
+let data = doc.data();
+
+promptList.innerHTML += `
+<div class="card">
+<img src="${data.image}">
+<p>${data.text}</p>
+
+<button class="btn" onclick="navigator.clipboard.writeText('${data.text}')">
+Copy Prompt
+</button>
+
+</div>
+`;
+});
+
+}
+
+/* Default Load */
+
+loadCategory("all");
+
+</script>
+
+</body>
+</html>
