@@ -6,22 +6,17 @@
 <title>All Prompts - PromptGoAI</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
 
 body{
 background:#0f172a;
 color:white;
+font-family:Arial, sans-serif;
+margin:0;
 }
 
 nav{
 display:flex;
 justify-content:space-between;
-align-items:center;
 padding:20px 8%;
 background:#0b1220;
 }
@@ -42,52 +37,51 @@ text-decoration:none;
 font-weight:bold;
 }
 
+/* Section */
+
 .section{
 padding:80px 8%;
 text-align:center;
-}
-
-.section h2{
-font-size:36px;
-margin-bottom:40px;
 }
 
 .cards{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:25px;
+margin-top:40px;
 }
+
+/* Prompt Card */
 
 .card{
 background:linear-gradient(145deg,#1e293b,#0f172a);
-padding:30px;
+padding:25px;
 border-radius:20px;
 transition:0.3s;
 box-shadow:0 10px 25px rgba(0,0,0,0.4);
 }
 
-.card:hover{
-transform:translateY(-8px);
-}
-
-.card h3{
-color:#38bdf8;
+.card img{
+width:100%;
+border-radius:10px;
 margin-bottom:15px;
 }
 
 .card p{
 color:#cbd5e1;
-margin-bottom:20px;
+margin-top:10px;
 }
 
 .btn{
 display:inline-block;
-padding:10px 25px;
+padding:10px 20px;
 background:#38bdf8;
 color:#0f172a;
 border-radius:25px;
 text-decoration:none;
 font-weight:bold;
+margin-top:12px;
+cursor:pointer;
 }
 
 footer{
@@ -97,6 +91,7 @@ text-align:center;
 color:#94a3b8;
 margin-top:60px;
 }
+
 </style>
 </head>
 
@@ -104,103 +99,50 @@ margin-top:60px;
 
 <nav>
 <h1>PromptGoAI</h1>
+
 <ul>
 <li><a href="index.html">Home</a></li>
-<li><a href="chatgpt.html">ChatGPT</a></li>
-<li><a href="gemini.html">Gemini</a></li>
 <li><a href="all-prompts.html">All Prompts</a></li>
 </ul>
 </nav>
 
 <section class="section">
-<h2>🚀 Explore All Prompt Categories</h2>
 
-<div class="cards">
+<h2>🚀 All AI Prompts</h2>
 
-<div class="card">
-<h3>🔥 ChatGPT Prompts</h3>
-<p>Powerful productivity, business & content writing prompts.</p>
-<a href="chatgpt.html" class="btn">View Prompts</a>
-</div>
+<div class="cards" id="promptList"></div>
 
-<div class="card">
-<h3>💎 Gemini Prompts</h3>
-<p>Specially optimized prompts for Google Gemini AI.</p>
-<a href="gemini.html" class="btn">View Prompts</a>
-</div>
-
-<div class="card">
-<h3>📸 Instagram Model Prompts</h3>
-<p>Cinematic & viral style prompts for creators.</p>
-<a href="chatgpt.html" class="btn">Explore</a>
-</div>
-
-<div class="card">
-<h3>💼 Business Prompts</h3>
-<p>Startup, freelancing & money making AI prompts.</p>
-<a href="chatgpt.html" class="btn">Explore</a>
-</div>
-
-</div>
 </section>
 
 <footer>
 © 2026 PromptGoAI | Built with ❤️ by Arsh
 </footer>
+
+<!-- Firebase Script -->
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
-  authDomain: "promptgoai.firebaseapp.com",
-  projectId: "promptgoai",
-  storageBucket: "promptgoai.firebasestorage.app",
-  messagingSenderId: "500683349924",
-  appId: "1:500683349924:web:a34bdeba6954ec69272b31",
-  measurementId: "G-N7MLSTF3LM"
+apiKey: "AIzaSyAbTMOKPD5_YE0Z0iKNdZvl_40plYxCyug",
+authDomain: "promptgoai.firebaseapp.com",
+projectId: "promptgoai",
+storageBucket: "promptgoai.firebasestorage.app",
+messagingSenderId: "500683349924",
+appId: "1:500683349924:web:a34bdeba6954ec69272b31"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const promptForm = document.getElementById("promptForm");
+async function loadPrompts(){
+
 const promptList = document.getElementById("promptList");
 
-promptForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+promptList.innerHTML="";
 
-  const promptText = document.getElementById("promptText").value;
-  const imageUrl = document.getElementById("imageUrl").value;
+const querySnapshot = await getDocs(collection(db,"prompts"));
 
-  await addDoc(collection(db, "prompts"), {
-    text: promptText,
-    image: imageUrl
-  });
-
-  alert("Prompt Added!");
-
-  promptForm.reset();
-  loadPrompts();
-});
-
-async function loadPrompts() {
-  promptList.innerHTML = "";
-  const querySnapshot = await getDocs(collection(db, "prompts"));
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    promptList.innerHTML += `
-      <div class="card">
-        <img src="${data.image}" width="100%">
-        <p>${data.text}</p>
-      </div>
-    `;
-  });
-}
-
-loadPrompts();
-
-</script>
-</body>
-</html>
+querySnapshot.forEach
