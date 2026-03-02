@@ -1,65 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>All AI Prompts - PromptGoAI</title>
+<title>All Prompts - PromptGoAI</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #0f172a;
-  color: white;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
 }
 
-nav {
-  background: #111827;
-  padding: 15px 30px;
-  display: flex;
-  justify-content: space-between;
+body{
+background:#0f172a;
+color:white;
 }
 
-nav a {
-  color: white;
-  text-decoration: none;
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+background:#0b1220;
 }
 
-header {
-  text-align: center;
-  padding: 50px 20px;
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
+nav h1{
+color:#38bdf8;
 }
 
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 20px;
+nav ul{
+display:flex;
+gap:20px;
+list-style:none;
 }
 
-.card {
-  background: #1e293b;
-  width: 280px;
-  margin: 15px;
-  padding: 20px;
-  border-radius: 12px;
+nav ul li a{
+color:white;
+text-decoration:none;
+font-weight:bold;
 }
 
-.card img {
-  width: 100%;
-  border-radius: 10px;
-  margin-bottom: 10px;
+.section{
+padding:80px 8%;
+text-align:center;
 }
 
-button {
-  margin-top: 10px;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  background: #2563eb;
-  color: white;
-  cursor: pointer;
+.section h2{
+font-size:36px;
+margin-bottom:40px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+}
+
+.card{
+background:linear-gradient(145deg,#1e293b,#0f172a);
+padding:30px;
+border-radius:20px;
+transition:0.3s;
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card h3{
+color:#38bdf8;
+margin-bottom:15px;
+}
+
+.card p{
+color:#cbd5e1;
+margin-bottom:20px;
+}
+
+.btn{
+display:inline-block;
+padding:10px 25px;
+background:#38bdf8;
+color:#0f172a;
+border-radius:25px;
+text-decoration:none;
+font-weight:bold;
+}
+
+footer{
+background:#0b1220;
+padding:20px;
+text-align:center;
+color:#94a3b8;
+margin-top:60px;
 }
 </style>
 </head>
@@ -67,48 +103,50 @@ button {
 <body>
 
 <nav>
-  <div>PromptGoAI</div>
-  <a href="index.html">Home</a>
+<h1>PromptGoAI</h1>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="chatgpt.html">ChatGPT</a></li>
+<li><a href="gemini.html">Gemini</a></li>
+<li><a href="all-prompts.html">All Prompts</a></li>
+</ul>
 </nav>
 
-<header>
-  <h1>All AI Image Prompts</h1>
-  <p>Instagram • Cinematic • Fantasy</p>
-</header>
+<section class="section">
+<h2>🚀 Explore All Prompt Categories</h2>
 
-<div class="container" id="promptContainer"></div>
+<div class="cards">
 
-<script>
-fetch('data/prompts.json')
-.then(response => response.json())
-.then(data => {
-  const container = document.getElementById("promptContainer");
+<div class="card">
+<h3>🔥 ChatGPT Prompts</h3>
+<p>Powerful productivity, business & content writing prompts.</p>
+<a href="chatgpt.html" class="btn">View Prompts</a>
+</div>
 
-  data.forEach((item, index) => {
-    const card = document.createElement("div");
-    card.className = "card";
+<div class="card">
+<h3>💎 Gemini Prompts</h3>
+<p>Specially optimized prompts for Google Gemini AI.</p>
+<a href="gemini.html" class="btn">View Prompts</a>
+</div>
 
-    card.innerHTML = `
-      <h3>${item.title}</h3>
-      <img src="${item.image}">
-      <p id="p${index}">${item.prompt}</p>
-      <button onclick="copyPrompt('p${index}')">Copy Prompt</button>
-    `;
+<div class="card">
+<h3>📸 Instagram Model Prompts</h3>
+<p>Cinematic & viral style prompts for creators.</p>
+<a href="chatgpt.html" class="btn">Explore</a>
+</div>
 
-    container.appendChild(card);
-  });
-})
-.catch(error => {
-  document.getElementById("promptContainer").innerHTML =
-  "<p style='color:red;text-align:center;'>Error loading prompts</p>";
-});
+<div class="card">
+<h3>💼 Business Prompts</h3>
+<p>Startup, freelancing & money making AI prompts.</p>
+<a href="chatgpt.html" class="btn">Explore</a>
+</div>
 
-function copyPrompt(id) {
-  const text = document.getElementById(id).innerText;
-  navigator.clipboard.writeText(text);
-  alert("Prompt Copied!");
-}
-</script>
+</div>
+</section>
+
+<footer>
+© 2026 PromptGoAI | Built with ❤️ by Arsh
+</footer>
 
 </body>
 </html>
