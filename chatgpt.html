@@ -41,9 +41,10 @@ display:inline-block;
 padding:10px 25px;
 background:#38bdf8;
 color:#0f172a;
+border:none;
 border-radius:25px;
-text-decoration:none;
 font-weight:bold;
+cursor:pointer;
 }
 
 footer{
@@ -76,19 +77,19 @@ margin-top:60px;
 <div class="card">
 <h3>SEO Blog Writer</h3>
 <p>Write a high-ranking SEO optimized blog post about [topic].</p>
-<a href="#" class="btn">Copy Prompt</a>
+<button class="btn" onclick="copyText('Write a high-ranking SEO optimized blog post about [topic].', this)">Copy Prompt</button>
 </div>
 
 <div class="card">
 <h3>Business Idea Generator</h3>
 <p>Generate 10 profitable online business ideas with low investment.</p>
-<a href="#" class="btn">Copy Prompt</a>
+<button class="btn" onclick="copyText('Generate 10 profitable online business ideas with low investment.', this)">Copy Prompt</button>
 </div>
 
 <div class="card">
 <h3>Instagram Caption Creator</h3>
 <p>Create viral Instagram captions for [niche].</p>
-<a href="#" class="btn">Copy Prompt</a>
+<button class="btn" onclick="copyText('Create viral Instagram captions for [niche].', this)">Copy Prompt</button>
 </div>
 
 </div>
@@ -97,6 +98,16 @@ margin-top:60px;
 <footer>
 © 2026 PromptGoAI | Built with ❤️ by Arsh
 </footer>
+
+<script>
+function copyText(text, button) {
+  navigator.clipboard.writeText(text);
+  button.innerText = "Copied!";
+  setTimeout(() => {
+    button.innerText = "Copy Prompt";
+  }, 1500);
+}
+</script>
 
 </body>
 </html>
