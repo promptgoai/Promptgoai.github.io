@@ -10,8 +10,11 @@
 body{background:#0f172a;color:white;}
 
 nav{
-display:flex;justify-content:space-between;align-items:center;
-padding:20px 8%;background:#0b1220;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+background:#0b1220;
 }
 nav h1{color:#38bdf8;}
 nav ul{display:flex;gap:20px;list-style:none;}
@@ -28,7 +31,8 @@ gap:25px;
 
 .card{
 background:linear-gradient(145deg,#1e293b,#0f172a);
-padding:30px;border-radius:20px;
+padding:30px;
+border-radius:20px;
 box-shadow:0 10px 25px rgba(0,0,0,0.4);
 transition:0.3s;
 }
@@ -41,9 +45,10 @@ display:inline-block;
 padding:10px 25px;
 background:#38bdf8;
 color:#0f172a;
+border:none;
 border-radius:25px;
-text-decoration:none;
 font-weight:bold;
+cursor:pointer;
 }
 
 footer{
@@ -75,20 +80,20 @@ margin-top:60px;
 
 <div class="card">
 <h3>YouTube Script Creator</h3>
-<p>Create an engaging YouTube script about [topic] with hook & CTA.</p>
-<a href="#" class="btn">Copy Prompt</a>
+<p>Create an engaging YouTube script about [topic] with hook, storytelling & CTA.</p>
+<button class="btn" onclick="copyText('Create an engaging YouTube script about [topic] with hook, storytelling & CTA.', this)">Copy Prompt</button>
 </div>
 
 <div class="card">
 <h3>Startup Growth Plan</h3>
-<p>Generate a 30-day growth plan for a new startup.</p>
-<a href="#" class="btn">Copy Prompt</a>
+<p>Generate a detailed 30-day growth strategy for a new startup.</p>
+<button class="btn" onclick="copyText('Generate a detailed 30-day growth strategy for a new startup.', this)">Copy Prompt</button>
 </div>
 
 <div class="card">
 <h3>Content Repurposing Prompt</h3>
-<p>Turn this blog into Twitter threads, LinkedIn posts & reels script.</p>
-<a href="#" class="btn">Copy Prompt</a>
+<p>Turn this blog post into Twitter threads, LinkedIn posts & Instagram reels script.</p>
+<button class="btn" onclick="copyText('Turn this blog post into Twitter threads, LinkedIn posts & Instagram reels script.', this)">Copy Prompt</button>
 </div>
 
 </div>
@@ -97,6 +102,16 @@ margin-top:60px;
 <footer>
 © 2026 PromptGoAI | Built with ❤️ by Arsh
 </footer>
+
+<script>
+function copyText(text, button) {
+  navigator.clipboard.writeText(text);
+  button.innerText = "Copied!";
+  setTimeout(() => {
+    button.innerText = "Copy Prompt";
+  }, 1500);
+}
+</script>
 
 </body>
 </html>
