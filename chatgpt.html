@@ -1,30 +1,102 @@
-<section id="chatgpt">
-    <h2>ChatGPT Prompts</h2>
-    <div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatGPT Prompts - PromptGoAI</title>
 
-        <div class="card">
-            <h3>Viral Instagram Caption</h3>
-            <p id="c1">Generate 20 viral Instagram captions with trending hashtags for a travel post.</p>
-            <button onclick="copyText('c1')">Copy Prompt</button>
-        </div>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{background:#0f172a;color:white;}
 
-        <div class="card">
-            <h3>YouTube Script Writer</h3>
-            <p id="c2">Write a 5-minute engaging YouTube script on how AI will impact future jobs.</p>
-            <button onclick="copyText('c2')">Copy Prompt</button>
-        </div>
+nav{
+display:flex;justify-content:space-between;align-items:center;
+padding:20px 8%;background:#0b1220;
+}
+nav h1{color:#38bdf8;}
+nav ul{display:flex;gap:20px;list-style:none;}
+nav ul li a{color:white;text-decoration:none;font-weight:bold;}
 
-        <div class="card">
-            <h3>Business Plan Generator</h3>
-            <p id="c3">Create a detailed business plan for a low-budget AI startup including revenue model.</p>
-            <button onclick="copyText('c3')">Copy Prompt</button>
-        </div>
+.section{padding:80px 8%;text-align:center;}
+.section h2{font-size:36px;margin-bottom:40px;}
 
-        <div class="card">
-            <h3>Assignment Writer</h3>
-            <p id="c4">Write a 1000-word assignment on climate change in simple and easy language.</p>
-            <button onclick="copyText('c4')">Copy Prompt</button>
-        </div>
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+}
 
-    </div>
+.card{
+background:linear-gradient(145deg,#1e293b,#0f172a);
+padding:30px;border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+transition:0.3s;
+}
+.card:hover{transform:translateY(-8px);}
+.card h3{color:#38bdf8;margin-bottom:15px;}
+.card p{color:#cbd5e1;margin-bottom:20px;}
+
+.btn{
+display:inline-block;
+padding:10px 25px;
+background:#38bdf8;
+color:#0f172a;
+border-radius:25px;
+text-decoration:none;
+font-weight:bold;
+}
+
+footer{
+background:#0b1220;
+padding:20px;
+text-align:center;
+color:#94a3b8;
+margin-top:60px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<h1>PromptGoAI</h1>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="chatgpt.html">ChatGPT</a></li>
+<li><a href="gemini.html">Gemini</a></li>
+<li><a href="all-prompts.html">All Prompts</a></li>
+</ul>
+</nav>
+
+<section class="section">
+<h2>🔥 ChatGPT Prompts Collection</h2>
+
+<div class="cards">
+
+<div class="card">
+<h3>SEO Blog Writer</h3>
+<p>Write a high-ranking SEO optimized blog post about [topic].</p>
+<a href="#" class="btn">Copy Prompt</a>
+</div>
+
+<div class="card">
+<h3>Business Idea Generator</h3>
+<p>Generate 10 profitable online business ideas with low investment.</p>
+<a href="#" class="btn">Copy Prompt</a>
+</div>
+
+<div class="card">
+<h3>Instagram Caption Creator</h3>
+<p>Create viral Instagram captions for [niche].</p>
+<a href="#" class="btn">Copy Prompt</a>
+</div>
+
+</div>
 </section>
+
+<footer>
+© 2026 PromptGoAI | Built with ❤️ by Arsh
+</footer>
+
+</body>
+</html>
