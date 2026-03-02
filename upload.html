@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Upload Prompt</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Segoe UI;
+background:#0f172a;
+color:white;
+padding:40px;
+}
+
+.container{
+max-width:600px;
+margin:auto;
+background:#1e293b;
+padding:30px;
+border-radius:15px;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border-radius:8px;
+border:none;
+}
+
+button{
+width:100%;
+padding:14px;
+background:#2563eb;
+color:white;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<script>
+
+/* 🔒 Admin Password Protection */
+
+let pass = prompt("Enter Admin Password");
+
+if(pass !== "12345"){
+alert("Access Denied");
+location.href="index.html";
+}
+
+</script>
+
+<div class="container">
+
+<h2>🚀 Upload Prompt Panel</h2>
+
+<input type="text" id="promptText" placeholder="Enter Prompt">
+
+<input type="text" id="imageUrl" placeholder="Image Direct Link">
+
+<input type="text" id="keywords" placeholder="Keywords (comma separated)">
+
+<select id="category">
+<option value="gemini">Gemini</option>
+<option value="chatgpt">ChatGPT</option>
+<option value="business">Business</option>
+<option value="all">All</option>
+</select>
+
+<button onclick="addPrompt()">Upload Prompt</button>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
+authDomain: "promptgoai.firebaseapp.com",
+projectId: "promptgoai",
+storageBucket: "promptgoai.firebasestorage.app",
+messagingSenderId: "500683349924",
+appId: "1:500683349924:web:a34bdeba6954ec69272b31"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.addPrompt = async function(){
+
+let text = document.getElementById("promptText").value;
+let image = document.getElementById("imageUrl").value;
+let keywords = document.getElementById("keywords").value;
+let category = document.getElementById("category").value;
+
+if(!text || !image){
+alert("Fill all fields");
+return;
+}
+
+await addDoc(collection(db,"prompts"),{
+text:text,
+image:image,
+keywords:keywords,
+category
