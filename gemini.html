@@ -1,194 +1,171 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Gemini Prompts - PromptGoAI</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
 body{
-background:#0f172a;
-color:white;
-font-family:Arial;
-margin:0;
+  margin:0;
+  font-family:Arial;
+  background:#111;
+  color:white;
+  transition:0.3s;
 }
-
-nav{
-background:#0b1220;
-padding:15px;
-text-align:center;
+header{
+  background:#1e1e1e;
+  padding:15px;
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
 }
-
-nav a{
-color:white;
-margin:10px;
-text-decoration:none;
-font-weight:bold;
+.toggle{
+  position:absolute;
+  right:20px;
+  top:15px;
+  cursor:pointer;
+  padding:5px 10px;
+  background:#444;
+  border-radius:5px;
 }
-
-h2{text-align:center;margin-top:30px;}
-
+.container{
+  padding:20px;
+}
 .search{
-text-align:center;
-margin:20px;
+  width:100%;
+  padding:10px;
+  margin-bottom:20px;
+  border-radius:5px;
+  border:none;
 }
-
-.search input{
-padding:10px;
-width:80%;
-max-width:400px;
-border-radius:20px;
-border:none;
-font-size:16px;
+.filter button{
+  margin:5px;
+  padding:8px 12px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
 }
-
-.filters{
-text-align:center;
-margin-bottom:20px;
-}
-
-.filters button{
-margin:5px;
-padding:8px 15px;
-border:none;
-border-radius:20px;
-cursor:pointer;
-font-weight:bold;
-background:#1e293b;
-color:white;
-}
-
-.filters button.active{
-background:#38bdf8;
-color:#0f172a;
-}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-padding:20px;
-}
-
 .card{
-background:#1e293b;
-padding:20px;
-border-radius:15px;
+  background:#1c1c1c;
+  padding:15px;
+  margin-bottom:15px;
+  border-radius:8px;
 }
-
-.copy-btn{
-padding:8px 20px;
-background:#38bdf8;
-border:none;
-border-radius:20px;
-cursor:pointer;
-font-weight:bold;
+.copy{
+  margin-top:10px;
+  padding:5px 10px;
+  background:#00c853;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
+footer{
+  text-align:center;
+  padding:15px;
+  background:#1e1e1e;
+  margin-top:20px;
+}
+.light{
+  background:#f4f4f4;
+  color:black;
+}
+.light header,
+.light footer{
+  background:#ddd;
+  color:black;
+}
+.light .card{
+  background:white;
 }
 </style>
 </head>
-
 <body>
 
-<nav>
-<a href="index.html">Home</a>
-<a href="chatgpt.html">ChatGPT</a>
-<a href="gemini.html">Gemini</a>
-</nav>
+<header>
+Gemini AI Prompts
+<span class="toggle" onclick="toggleMode()">Mode</span>
+</header>
 
-<h2>💎 50 Gemini AI Prompts</h2>
+<div class="container">
 
-<div class="search">
-<input type="text" id="searchInput" onkeyup="searchPrompts()" placeholder="Search prompts...">
+<input type="text" id="search" class="search" placeholder="Search prompts...">
+
+<div class="filter">
+<button onclick="filterCat('all')">All</button>
+<button onclick="filterCat('youtube')">YouTube</button>
+<button onclick="filterCat('business')">Business</button>
+<button onclick="filterCat('content')">Content</button>
 </div>
 
-<div class="filters">
-<button class="active" onclick="filterCategory('all', this)">All</button>
-<button onclick="filterCategory('youtube', this)">YouTube</button>
-<button onclick="filterCategory('startup', this)">Startup</button>
-<button onclick="filterCategory('content', this)">Content</button>
-<button onclick="filterCategory('ai', this)">AI</button>
-<button onclick="filterCategory('money', this)">Money</button>
+<div id="count"></div>
+
+<div id="prompts"></div>
+
 </div>
 
-<div class="cards" id="cardsContainer"></div>
+<footer>
+PromptGoAI © 2026 | Built by Arsh
+</footer>
 
 <script>
-
 const prompts = [
-
-{title:"YouTube Script",text:"Create highly engaging YouTube script with hook and CTA.",cat:"youtube"},
-{title:"YouTube Shorts Hook",text:"Generate 3-second viral hook for Shorts.",cat:"youtube"},
-{title:"Faceless Script",text:"Write faceless YouTube automation script.",cat:"youtube"},
-{title:"Video Ideas",text:"Generate 10 viral YouTube ideas.",cat:"youtube"},
-{title:"Storytelling Script",text:"Write emotional storytelling video script.",cat:"youtube"},
-
-{title:"90-Day Growth Plan",text:"Create 90-day startup growth roadmap.",cat:"startup"},
-{title:"Customer Persona",text:"Generate detailed buyer persona.",cat:"startup"},
-{title:"Go To Market",text:"Write complete go-to-market strategy.",cat:"startup"},
-{title:"Launch Strategy",text:"Create zero budget viral launch plan.",cat:"startup"},
-{title:"Investor Pitch",text:"Write persuasive investor pitch script.",cat:"startup"},
-
-{title:"Twitter Threads",text:"Turn blog into 10 Twitter threads.",cat:"content"},
-{title:"LinkedIn Authority Post",text:"Write authority LinkedIn post.",cat:"content"},
-{title:"Instagram Calendar",text:"Create 30-day Instagram calendar.",cat:"content"},
-{title:"Reels Script",text:"Write viral Instagram reel script.",cat:"content"},
-{title:"Newsletter",text:"Write weekly newsletter content.",cat:"content"},
-
-{title:"Chatbot Flow",text:"Generate ecommerce chatbot conversation flow.",cat:"ai"},
-{title:"Automation Workflow",text:"Create AI automation workflow.",cat:"ai"},
-{title:"Image Prompt",text:"Generate hyper-realistic AI image prompt.",cat:"ai"},
-{title:"Prompt Guide",text:"Write beginner prompt engineering guide.",cat:"ai"},
-{title:"AI SaaS Plan",text:"Create AI SaaS development roadmap.",cat:"ai"},
-
-{title:"Passive Income",text:"Generate 10 passive income ideas 2026.",cat:"money"},
-{title:"Sales Page Copy",text:"Write high converting sales page copy.",cat:"money"},
-{title:"Freelance Strategy",text:"Create freelancing positioning strategy.",cat:"money"},
-{title:"Webinar Script",text:"Write persuasive webinar script.",cat:"money"},
-{title:"Affiliate Plan",text:"Generate affiliate marketing strategy.",cat:"money"}
-
+{title:"Viral YouTube Script",
+text:"Create a 10 minute viral YouTube script with strong hook and storytelling.",
+cat:"youtube"},
+{title:"Faceless Channel Idea",
+text:"Give 20 faceless YouTube channel ideas with earning potential.",
+cat:"youtube"},
+{title:"Startup Plan",
+text:"Create a 90 day startup launch roadmap with daily tasks.",
+cat:"business"},
+{title:"Instagram Content Plan",
+text:"Generate 30 days Instagram content plan for AI niche.",
+cat:"content"},
+{title:"AI SaaS Idea",
+text:"Give 10 AI SaaS ideas with revenue model explained.",
+cat:"business"}
 ];
 
-for(let i=0;i<prompts.length;i++){
-let card = `
-<div class="card" data-category="${prompts[i].cat}">
-<h3>${prompts[i].title}</h3>
-<p>${prompts[i].text}</p>
-<button class="copy-btn" onclick="copyText('${prompts[i].text}', this)">Copy Prompt</button>
-</div>
-`;
-document.getElementById("cardsContainer").innerHTML += card;
+function render(list){
+let html="";
+list.forEach(p=>{
+html+=`
+<div class="card">
+<h3>${p.title}</h3>
+<p>${p.text}</p>
+<button class="copy" onclick="copyText('${p.text}')">Copy</button>
+</div>`;
+});
+document.getElementById("prompts").innerHTML=html;
+document.getElementById("count").innerHTML="Total Prompts: "+list.length;
 }
 
-function copyText(text,button){
+function copyText(text){
 navigator.clipboard.writeText(text);
-button.innerText="Copied!";
-setTimeout(()=>{button.innerText="Copy Prompt";},1500);
+alert("Copied!");
 }
 
-function searchPrompts(){
-let input=document.getElementById("searchInput").value.toLowerCase();
-let cards=document.getElementsByClassName("card");
-for(let i=0;i<cards.length;i++){
-let text=cards[i].innerText.toLowerCase();
-cards[i].style.display=text.includes(input)?"block":"none";
-}
-}
-
-function filterCategory(category,btn){
-let cards=document.getElementsByClassName("card");
-let buttons=document.querySelectorAll(".filters button");
-buttons.forEach(b=>b.classList.remove("active"));
-btn.classList.add("active");
-
-for(let i=0;i<cards.length;i++){
-let cat=cards[i].getAttribute("data-category");
-if(category==="all"||cat.includes(category)){
-cards[i].style.display="block";
+function filterCat(cat){
+if(cat==="all"){
+render(prompts);
 }else{
-cards[i].style.display="none";
-}
+render(prompts.filter(p=>p.cat===cat));
 }
 }
 
+document.getElementById("search").addEventListener("input",function(){
+let value=this.value.toLowerCase();
+let filtered=prompts.filter(p=>
+p.title.toLowerCase().includes(value) ||
+p.text.toLowerCase().includes(value)
+);
+render(filtered);
+});
+
+function toggleMode(){
+document.body.classList.toggle("light");
+}
+
+render(prompts);
 </script>
 
 </body>
