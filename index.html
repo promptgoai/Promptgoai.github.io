@@ -161,5 +161,28 @@ margin-top:60px;
 © 2026 PromptGoAI | Built with ❤️ by Arsh
 </footer>
 
+
+<!-- 🔥 FIREBASE SCRIPT START -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
+  authDomain: "promptgoai.firebaseapp.com",
+  projectId: "promptgoai",
+  storageBucket: "promptgoai.firebasestorage.app",
+  messagingSenderId: "500683349924",
+  appId: "1:500683349924:web:a34bdeba6954ec69272b31",
+  measurementId: "G-N7MLSTF3LM"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+console.log("🔥 Firebase Connected Successfully");
+</script>
+<!-- 🔥 FIREBASE SCRIPT END -->
+
 </body>
 </html>
