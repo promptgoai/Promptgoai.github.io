@@ -97,6 +97,8 @@ appId: "1:500683349924:web:a34bdeba6954ec69272b31"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+/* ⭐ Global Upload Function */
+
 window.addPrompt = async function(){
 
 let text = document.getElementById("promptText").value;
@@ -109,8 +111,30 @@ alert("Fill all fields");
 return;
 }
 
+try{
+
 await addDoc(collection(db,"prompts"),{
 text:text,
 image:image,
 keywords:keywords,
-category
+category:category,
+created:Date.now()
+});
+
+alert("Upload Success ✅");
+
+document.getElementById("promptText").value="";
+document.getElementById("imageUrl").value="";
+document.getElementById("keywords").value="";
+
+}catch(err){
+console.log(err);
+alert("Upload Failed ❌");
+}
+
+}
+
+</script>
+
+</body>
+</html>
