@@ -69,8 +69,8 @@ border:none;
 
 footer{
 background:#0b1220;
-padding:20px;
 text-align:center;
+padding:20px;
 color:#94a3b8;
 margin-top:60px;
 }
@@ -109,16 +109,32 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
+apiKey: "AIzaSyAbTMOKPD5_YE0Z0I2pl40plYxCyug",
 authDomain: "promptgoai.firebaseapp.com",
 projectId: "promptgoai",
 storageBucket: "promptgoai.firebasestorage.app",
-messagingSenderId: "500683349924",
+messagingSenderId: "500683499924",
 appId: "1:promptgoai:web:a34bdeba6954ec69272b31"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+/* Read More Toggle */
+
+window.toggleReadMore = function(id,text){
+
+let el = document.getElementById("preview-"+id);
+
+if(el.dataset.expanded === "true"){
+el.innerText = text.substring(0,80)+"...";
+el.dataset.expanded = "false";
+}else{
+el.innerText = text;
+el.dataset.expanded = "true";
+}
+
+}
 
 /* Category Loader */
 
@@ -142,18 +158,27 @@ snapshot.forEach(doc=>{
 let data = doc.data();
 
 let preview = data.text.length > 80 
-? data.text.substring(0,80)+"..." 
+? data.text.substring(0,80)+"..."
 : data.text;
 
 promptList.innerHTML += `
 <div class="card">
 
 <img src="${data.image || ''}"
+style="width:100%;border-radius:10px;object-fit:cover;"
 onerror="this.style.display='none'">
 
-<p>${preview}</p>
+<p id="preview-${doc.id}" data-expanded="false">
+${preview}
+</p>
 
-<button class="btn" onclick="navigator.clipboard.writeText('${data.text}')">
+<button class="btn" 
+onclick="toggleReadMore('${doc.id}','${data.text}')">
+Read More
+</button>
+
+<button class="btn" 
+onclick="navigator.clipboard.writeText('${data.text}')">
 Copy Prompt
 </button>
 
