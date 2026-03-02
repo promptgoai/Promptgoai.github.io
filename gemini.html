@@ -3,95 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <title>Gemini Prompts - PromptGoAI</title>
-<style>
-body{
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background:#0f172a;
-  color:white;
-}
-header{
+<header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   background:#1e293b;
-  padding:18px;
-  text-align:center;
-  font-size:22px;
+  padding:15px 30px;
+}
+
+.logo{
+  font-size:20px;
   font-weight:600;
-  position:relative;
 }
-.toggle{
-  position:absolute;
-  right:20px;
-  top:15px;
-  cursor:pointer;
-  padding:6px 12px;
-  background:#334155;
-  border-radius:6px;
-}
-.container{
-  padding:25px;
-  max-width:900px;
-  margin:auto;
-}
-.search{
-  width:100%;
-  padding:12px;
-  margin-bottom:20px;
-  border-radius:6px;
-  border:none;
-  font-size:15px;
-}
-.filter{
-  margin-bottom:20px;
-}
-.filter button{
-  margin:5px;
-  padding:8px 14px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  background:#2563eb;
+
+nav a{
+  margin:0 10px;
+  text-decoration:none;
   color:white;
-}
-.card{
-  background:#1e293b;
-  padding:18px;
-  margin-bottom:18px;
-  border-radius:10px;
-  transition:0.2s;
-}
-.card:hover{
-  transform:translateY(-3px);
-}
-.copy{
-  margin-top:10px;
-  padding:6px 12px;
-  background:#22c55e;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  color:white;
-}
-footer{
-  text-align:center;
-  padding:18px;
-  background:#1e293b;
-  margin-top:40px;
   font-size:14px;
 }
-.light{
-  background:#f1f5f9;
-  color:black;
+
+nav a:hover{
+  color:#38bdf8;
 }
-.light header,
-.light footer{
-  background:#e2e8f0;
-  color:black;
+
+.mode-btn{
+  background:#334155;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
 }
-.light .card{
-  background:white;
-}
-</style>
-</head>
 <body>
 
 <header>
