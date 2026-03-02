@@ -135,7 +135,7 @@ authDomain: "promptgoai.firebaseapp.com",
 projectId: "promptgoai",
 storageBucket: "promptgoai.firebasestorage.app",
 messagingSenderId: "500683349924",
-appId: "1:500683349924:web:a34bdeba6954ec69272b31"
+appId: "1:promptgoai:web:a34bdeba6954ec69272b31"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -164,8 +164,14 @@ let data = doc.data();
 
 promptList.innerHTML += `
 <div class="card">
-<img src="${data.image}" style="width:100%;border-radius:10px;" onerror="this.style.display='none'">
-<p>${data.text}</p>
+
+<img src="${data.image}" 
+style="width:100%;border-radius:10px;" 
+onerror="this.style.display='none'">
+
+<p>
+${data.text.length > 80 ? data.text.substring(0,80)+"..." : data.text}
+</p>
 
 <button class="btn" onclick="navigator.clipboard.writeText('${data.text}')">
 Copy Prompt
