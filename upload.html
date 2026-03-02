@@ -70,6 +70,7 @@ location.href="index.html";
 <input type="text" id="keywords" placeholder="Keywords (comma separated)">
 
 <select id="category">
+<option value="">Select Category</option>
 <option value="gemini">Gemini</option>
 <option value="chatgpt">ChatGPT</option>
 <option value="business">Business</option>
@@ -86,7 +87,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
+apiKey: "AIzaSyAbTMOKPD5_YE0Z0iKNdZvl_40plYxCyug",
 authDomain: "promptgoai.firebaseapp.com",
 projectId: "promptgoai",
 storageBucket: "promptgoai.firebasestorage.app",
@@ -97,7 +98,7 @@ appId: "1:500683349924:web:a34bdeba6954ec69272b31"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* ⭐ Global Upload Function */
+/* ⭐ Upload Function */
 
 window.addPrompt = async function(){
 
@@ -106,7 +107,7 @@ let image = document.getElementById("imageUrl").value;
 let keywords = document.getElementById("keywords").value;
 let category = document.getElementById("category").value;
 
-if(!text || !image){
+if(!text || !image || !category){
 alert("Fill all fields");
 return;
 }
