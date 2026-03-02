@@ -10,15 +10,32 @@
 body{background:#0f172a;color:white;}
 
 nav{
-display:flex;justify-content:space-between;align-items:center;
-padding:20px 8%;background:#0b1220;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+background:#0b1220;
 }
 nav h1{color:#38bdf8;}
 nav ul{display:flex;gap:20px;list-style:none;}
 nav ul li a{color:white;text-decoration:none;font-weight:bold;}
 
-.section{padding:80px 8%;text-align:center;}
-.section h2{font-size:36px;margin-bottom:40px;}
+.section{padding:60px 8%;text-align:center;}
+.section h2{font-size:36px;margin-bottom:20px;}
+
+.search-box{
+margin:20px auto 40px auto;
+max-width:400px;
+}
+
+.search-box input{
+width:100%;
+padding:12px;
+border-radius:25px;
+border:none;
+outline:none;
+font-size:16px;
+}
 
 .cards{
 display:grid;
@@ -28,16 +45,17 @@ gap:25px;
 
 .card{
 background:linear-gradient(145deg,#1e293b,#0f172a);
-padding:30px;border-radius:20px;
+padding:30px;
+border-radius:20px;
 box-shadow:0 10px 25px rgba(0,0,0,0.4);
 transition:0.3s;
 }
+
 .card:hover{transform:translateY(-8px);}
 .card h3{color:#38bdf8;margin-bottom:15px;}
 .card p{color:#cbd5e1;margin-bottom:20px;}
 
 .btn{
-display:inline-block;
 padding:10px 25px;
 background:#38bdf8;
 color:#0f172a;
@@ -72,7 +90,11 @@ margin-top:60px;
 <section class="section">
 <h2>🔥 ChatGPT Prompts Collection</h2>
 
-<div class="cards">
+<div class="search-box">
+<input type="text" id="searchInput" onkeyup="searchPrompts()" placeholder="Search prompts...">
+</div>
+
+<div class="cards" id="cardContainer">
 
 <div class="card">
 <h3>SEO Blog Writer</h3>
@@ -101,11 +123,19 @@ margin-top:60px;
 
 <script>
 function copyText(text, button) {
-  navigator.clipboard.writeText(text);
-  button.innerText = "Copied!";
-  setTimeout(() => {
-    button.innerText = "Copy Prompt";
-  }, 1500);
+navigator.clipboard.writeText(text);
+button.innerText="Copied!";
+setTimeout(()=>{button.innerText="Copy Prompt";},1500);
+}
+
+function searchPrompts(){
+let input=document.getElementById("searchInput").value.toLowerCase();
+let cards=document.getElementsByClassName("card");
+
+for(let i=0;i<cards.length;i++){
+let text=cards[i].innerText.toLowerCase();
+cards[i].style.display=text.includes(input)?"block":"none";
+}
 }
 </script>
 
