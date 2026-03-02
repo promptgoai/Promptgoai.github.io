@@ -147,6 +147,60 @@ margin-top:60px;
 <footer>
 © 2026 PromptGoAI | Built with ❤️ by Arsh
 </footer>
+<script type="module">
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
+  authDomain: "promptgoai.firebaseapp.com",
+  projectId: "promptgoai",
+  storageBucket: "promptgoai.firebasestorage.app",
+  messagingSenderId: "500683349924",
+  appId: "1:500683349924:web:a34bdeba6954ec69272b31",
+  measurementId: "G-N7MLSTF3LM"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const promptForm = document.getElementById("promptForm");
+const promptList = document.getElementById("promptList");
+
+promptForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const promptText = document.getElementById("promptText").value;
+  const imageUrl = document.getElementById("imageUrl").value;
+
+  await addDoc(collection(db, "prompts"), {
+    text: promptText,
+    image: imageUrl
+  });
+
+  alert("Prompt Added!");
+
+  promptForm.reset();
+  loadPrompts();
+});
+
+async function loadPrompts() {
+  promptList.innerHTML = "";
+  const querySnapshot = await getDocs(collection(db, "prompts"));
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    promptList.innerHTML += `
+      <div class="card">
+        <img src="${data.image}" width="100%">
+        <p>${data.text}</p>
+      </div>
+    `;
+  });
+}
+
+loadPrompts();
+
+</script>
 </body>
 </html>
