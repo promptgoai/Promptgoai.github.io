@@ -46,16 +46,40 @@ const db=getFirestore(app);
 
 let allData=[];
 
+/* LIKE */
 window.likePrompt=async function(id){
 await updateDoc(doc(db,"prompts",id),{likes:increment(1)});
-location.reload();
+loadCategory("all");
 }
 
+/* VIEW */
 window.viewPrompt=async function(id){
 await updateDoc(doc(db,"prompts",id),{views:increment(1)});
 }
 
+/* COPY */
+window.copyPrompt=function(text){
+navigator.clipboard.writeText(text).then(()=>{
+alert("Copied ✅");
+});
+}
+
+/* READ MORE */
+window.toggleReadMore=function(id,fullText){
+let el=document.getElementById("preview-"+id);
+
+if(el.dataset.expanded==="true"){
+el.innerText=fullText.substring(0,100)+"...";
+el.dataset.expanded="false";
+}else{
+el.innerText=fullText;
+el.dataset.expanded="true";
+viewPrompt(id);
+}
+}
+
 window.loadCategory=async function(cat){
+
 let q;
 if(cat==="all"){
 q=query(collection(db,"prompts"),orderBy("created","desc"));
@@ -74,28 +98,52 @@ displayPrompts(allData);
 function displayPrompts(data){
 const list=document.getElementById("promptList");
 list.innerHTML="";
+
 data.forEach(p=>{
+let preview=p.text.length>100?p.text.substring(0,100)+"...":p.text;
+
 list.innerHTML+=`
-<div class="card" onclick="viewPrompt('${p.id}')">
+<div class="card">
 <img src="${p.image||''}" onerror="this.style.display='none'">
 <h3>${p.title}</h3>
-<p>${p.text.substring(0,100)}...</p>
+
+<p id="preview-${p.id}" data-expanded="false">
+${preview}
+</p>
+
 <div class="meta">
 <span>❤️ ${p.likes||0}</span>
 <span>👁 ${p.views||0}</span>
 </div>
-<button class="btn" onclick="likePrompt('${p.id}')">Like</button>
+
+<button class="btn" onclick="toggleReadMore('${p.id}', ${JSON.stringify(p.text)})">
+Read More
+</button>
+
+<button class="btn" onclick="copyPrompt(${JSON.stringify(p.text)})">
+Copy
+</button>
+
+<button class="btn" onclick="likePrompt('${p.id}')">
+Like
+</button>
+
 </div>`;
 });
 }
 
+/* SEARCH */
 document.getElementById("searchInput").addEventListener("input",function(){
 let val=this.value.toLowerCase();
-let filtered=allData.filter(p=>p.title.toLowerCase().includes(val)||p.text.toLowerCase().includes(val));
+let filtered=allData.filter(p=>
+(p.title && p.title.toLowerCase().includes(val)) ||
+(p.text && p.text.toLowerCase().includes(val))
+);
 displayPrompts(filtered);
 });
 
 loadCategory("all");
+
 </script>
 
 </body>
