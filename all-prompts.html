@@ -5,29 +5,11 @@
 <title>All Prompts - PromptGoAI</title>
 
 <style>
+body{background:#0f172a;color:white;font-family:Arial;margin:0;}
+nav{padding:20px 8%;background:#0b1220;}
+nav h1{color:#38bdf8;}
 
-body{
-background:#0f172a;
-color:white;
-font-family:Arial, sans-serif;
-margin:0;
-}
-
-nav{
-display:flex;
-justify-content:space-between;
-padding:20px 8%;
-background:#0b1220;
-}
-
-nav h1{
-color:#38bdf8;
-}
-
-.section{
-padding:80px 8%;
-text-align:center;
-}
+.section{padding:80px 8%;text-align:center;}
 
 .cards{
 display:grid;
@@ -48,23 +30,21 @@ transition:0.3s;
 width:100%;
 border-radius:10px;
 object-fit:cover;
+margin-bottom:10px;
 }
 
-.card p{
-color:#cbd5e1;
-margin-top:12px;
-}
+.card h3{color:#38bdf8;margin-bottom:10px;}
+.card p{color:#cbd5e1;}
 
 .btn{
-display:inline-block;
-padding:10px 20px;
+padding:8px 18px;
 background:#38bdf8;
 color:#0f172a;
 border-radius:25px;
-font-weight:bold;
-margin-top:12px;
-cursor:pointer;
 border:none;
+cursor:pointer;
+margin-top:10px;
+font-weight:bold;
 }
 
 footer{
@@ -74,7 +54,6 @@ padding:20px;
 color:#94a3b8;
 margin-top:60px;
 }
-
 </style>
 </head>
 
@@ -85,7 +64,6 @@ margin-top:60px;
 </nav>
 
 <section class="section">
-
 <h2>🚀 All AI Prompts</h2>
 
 <div style="margin-bottom:25px;">
@@ -106,89 +84,61 @@ margin-top:60px;
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyAbTMOKPD5_YE0Z0I2pl40plYxCyug",
+apiKey: "PASTE_YOUR_REAL_API_KEY",
 authDomain: "promptgoai.firebaseapp.com",
 projectId: "promptgoai",
 storageBucket: "promptgoai.firebasestorage.app",
-messagingSenderId: "500683499924",
-appId: "1:promptgoai:web:a34bdeba6954ec69272b31"
+messagingSenderId: "500683349924",
+appId: "1:500683349924:web:a34bdeba6954ec69272b31"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* Read More Toggle */
-
-window.toggleReadMore = function(id,text){
-
-let el = document.getElementById("preview-"+id);
-
-if(el.dataset.expanded === "true"){
-el.innerText = text.substring(0,80)+"...";
-el.dataset.expanded = "false";
+window.toggleReadMore=function(id,text){
+let el=document.getElementById("preview-"+id);
+if(el.dataset.expanded==="true"){
+el.innerText=text.substring(0,100)+"...";
+el.dataset.expanded="false";
 }else{
-el.innerText = text;
-el.dataset.expanded = "true";
+el.innerText=text;
+el.dataset.expanded="true";
+}
 }
 
-}
+window.loadCategory=async function(cat){
 
-/* Category Loader */
-
-window.loadCategory = async function(cat){
-
-const promptList = document.getElementById("promptList");
-
+const promptList=document.getElementById("promptList");
 promptList.innerHTML="";
 
 let q;
-
-if(cat === "all"){
-q = query(collection(db,"prompts"));
+if(cat==="all"){
+q=query(collection(db,"prompts"),orderBy("created","desc"));
 }else{
-q = query(collection(db,"prompts"), where("category","==",cat));
+q=query(collection(db,"prompts"),
+where("category","==",cat),
+orderBy("created","desc"));
 }
 
-const snapshot = await getDocs(q);
+const snapshot=await getDocs(q);
 
 snapshot.forEach(doc=>{
-let data = doc.data();
+let data=doc.data();
+let preview=data.text.length>100?data.text.substring(0,100)+"...":data.text;
 
-let preview = data.text.length > 80 
-? data.text.substring(0,80)+"..."
-: data.text;
-
-promptList.innerHTML += `
+promptList.innerHTML+=`
 <div class="card">
-
-<img src="${data.image || ''}"
-style="width:100%;border-radius:10px;object-fit:cover;"
-onerror="this.style.display='none'">
-
-<p id="preview-${doc.id}" data-expanded="false">
-${preview}
-</p>
-
-<button class="btn" 
-onclick="toggleReadMore('${doc.id}','${data.text}')">
-Read More
-</button>
-
-<button class="btn" 
-onclick="navigator.clipboard.writeText('${data.text}')">
-Copy Prompt
-</button>
-
-</div>
-`;
+<img src="${data.image||''}" onerror="this.style.display='none'">
+<h3>${data.title||"AI Prompt"}</h3>
+<p id="preview-${doc.id}" data-expanded="false">${preview}</p>
+<button class="btn" onclick="toggleReadMore('${doc.id}',${JSON.stringify(data.text)})">Read More</button>
+<button class="btn" onclick="navigator.clipboard.writeText(${JSON.stringify(data.text)})">Copy Prompt</button>
+</div>`;
 });
-
 }
-
-/* Default Load */
 
 loadCategory("all");
 
