@@ -44,9 +44,36 @@ appId:"1:500683349924:web:a34bdeba6954ec69272b31"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+/* LIKE */
 window.likePrompt = async function(id){
 await updateDoc(doc(db,"prompts",id),{likes:increment(1)});
-location.reload();
+loadTrending();
+}
+
+/* VIEW */
+window.viewPrompt = async function(id){
+await updateDoc(doc(db,"prompts",id),{views:increment(1)});
+}
+
+/* COPY */
+window.copyPrompt = function(text){
+navigator.clipboard.writeText(text).then(()=>{
+alert("Copied ✅");
+});
+}
+
+/* READ MORE */
+window.toggleReadMore = function(id,fullText){
+let el=document.getElementById("preview-"+id);
+
+if(el.dataset.expanded==="true"){
+el.innerText=fullText.substring(0,80)+"...";
+el.dataset.expanded="false";
+}else{
+el.innerText=fullText;
+el.dataset.expanded="true";
+viewPrompt(id);
+}
 }
 
 async function loadTrending(){
@@ -58,16 +85,34 @@ box.innerHTML="";
 
 snap.forEach(d=>{
 let p=d.data();
+let preview=p.text.length>80?p.text.substring(0,80)+"...":p.text;
+
 box.innerHTML+=`
 <div class="card">
 <img src="${p.image||''}" onerror="this.style.display='none'">
 <h3>${p.title}</h3>
-<p>${p.text.substring(0,80)}...</p>
+
+<p id="preview-${d.id}" data-expanded="false">
+${preview}
+</p>
+
 <div class="meta">
 <span>❤️ ${p.likes||0}</span>
 <span>👁 ${p.views||0}</span>
 </div>
-<button class="btn" onclick="likePrompt('${d.id}')">Like</button>
+
+<button class="btn" onclick="toggleReadMore('${d.id}', ${JSON.stringify(p.text)})">
+Read More
+</button>
+
+<button class="btn" onclick="copyPrompt(${JSON.stringify(p.text)})">
+Copy
+</button>
+
+<button class="btn" onclick="likePrompt('${d.id}')">
+Like
+</button>
+
 </div>`;
 });
 }
