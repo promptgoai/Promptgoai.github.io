@@ -1,62 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>All Prompts - PromptGoAI</title>
-
-<style>
-body{background:#0f172a;color:white;font-family:Arial;margin:0;}
-nav{padding:20px 8%;background:#0b1220;}
-nav h1{color:#38bdf8;}
-
-.section{padding:80px 8%;text-align:center;}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:25px;
-margin-top:40px;
-}
-
-.card{
-background:linear-gradient(145deg,#1e293b,#0f172a);
-padding:25px;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.4);
-transition:0.3s;
-}
-
-.card img{
-width:100%;
-border-radius:10px;
-object-fit:cover;
-margin-bottom:10px;
-}
-
-.card h3{color:#38bdf8;margin-bottom:10px;}
-.card p{color:#cbd5e1;}
-
-.btn{
-padding:8px 18px;
-background:#38bdf8;
-color:#0f172a;
-border-radius:25px;
-border:none;
-cursor:pointer;
-margin-top:10px;
-font-weight:bold;
-}
-
-footer{
-background:#0b1220;
-text-align:center;
-padding:20px;
-color:#94a3b8;
-margin-top:60px;
-}
-</style>
+<title>All Prompts</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <nav>
@@ -64,9 +12,11 @@ margin-top:60px;
 </nav>
 
 <section class="section">
-<h2>🚀 All AI Prompts</h2>
+<h2>🚀 All Prompts</h2>
 
-<div style="margin-bottom:25px;">
+<input type="text" id="searchInput" placeholder="Search prompts..." class="search">
+
+<div class="filter">
 <button class="btn" onclick="loadCategory('all')">All</button>
 <button class="btn" onclick="loadCategory('gemini')">Gemini</button>
 <button class="btn" onclick="loadCategory('chatgpt')">ChatGPT</button>
@@ -74,74 +24,78 @@ margin-top:60px;
 </div>
 
 <div class="cards" id="promptList"></div>
-
 </section>
 
-<footer>
-© 2026 PromptGoAI | Built with ❤️ by Arsh
-</footer>
+<footer>© 2026 PromptGoAI</footer>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, query, where, orderBy, getDocs, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "PASTE_YOUR_REAL_API_KEY",
-authDomain: "promptgoai.firebaseapp.com",
-projectId: "promptgoai",
-storageBucket: "promptgoai.firebasestorage.app",
-messagingSenderId: "500683349924",
-appId: "1:500683349924:web:a34bdeba6954ec69272b31"
+apiKey:"PASTE_YOUR_REAL_API_KEY",
+authDomain:"promptgoai.firebaseapp.com",
+projectId:"promptgoai",
+storageBucket:"promptgoai.firebasestorage.app",
+messagingSenderId:"500683349924",
+appId:"1:500683349924:web:a34bdeba6954ec69272b31"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
 
-window.toggleReadMore=function(id,text){
-let el=document.getElementById("preview-"+id);
-if(el.dataset.expanded==="true"){
-el.innerText=text.substring(0,100)+"...";
-el.dataset.expanded="false";
-}else{
-el.innerText=text;
-el.dataset.expanded="true";
+let allData=[];
+
+window.likePrompt=async function(id){
+await updateDoc(doc(db,"prompts",id),{likes:increment(1)});
+location.reload();
 }
+
+window.viewPrompt=async function(id){
+await updateDoc(doc(db,"prompts",id),{views:increment(1)});
 }
 
 window.loadCategory=async function(cat){
-
-const promptList=document.getElementById("promptList");
-promptList.innerHTML="";
-
 let q;
 if(cat==="all"){
 q=query(collection(db,"prompts"),orderBy("created","desc"));
 }else{
-q=query(collection(db,"prompts"),
-where("category","==",cat),
-orderBy("created","desc"));
+q=query(collection(db,"prompts"),where("category","==",cat),orderBy("created","desc"));
 }
 
-const snapshot=await getDocs(q);
+const snap=await getDocs(q);
+allData=[];
+snap.forEach(d=>{
+allData.push({id:d.id,...d.data()});
+});
+displayPrompts(allData);
+}
 
-snapshot.forEach(doc=>{
-let data=doc.data();
-let preview=data.text.length>100?data.text.substring(0,100)+"...":data.text;
-
-promptList.innerHTML+=`
-<div class="card">
-<img src="${data.image||''}" onerror="this.style.display='none'">
-<h3>${data.title||"AI Prompt"}</h3>
-<p id="preview-${doc.id}" data-expanded="false">${preview}</p>
-<button class="btn" onclick="toggleReadMore('${doc.id}',${JSON.stringify(data.text)})">Read More</button>
-<button class="btn" onclick="navigator.clipboard.writeText(${JSON.stringify(data.text)})">Copy Prompt</button>
+function displayPrompts(data){
+const list=document.getElementById("promptList");
+list.innerHTML="";
+data.forEach(p=>{
+list.innerHTML+=`
+<div class="card" onclick="viewPrompt('${p.id}')">
+<img src="${p.image||''}" onerror="this.style.display='none'">
+<h3>${p.title}</h3>
+<p>${p.text.substring(0,100)}...</p>
+<div class="meta">
+<span>❤️ ${p.likes||0}</span>
+<span>👁 ${p.views||0}</span>
+</div>
+<button class="btn" onclick="likePrompt('${p.id}')">Like</button>
 </div>`;
 });
 }
 
-loadCategory("all");
+document.getElementById("searchInput").addEventListener("input",function(){
+let val=this.value.toLowerCase();
+let filtered=allData.filter(p=>p.title.toLowerCase().includes(val)||p.text.toLowerCase().includes(val));
+displayPrompts(filtered);
+});
 
+loadCategory("all");
 </script>
 
 </body>
