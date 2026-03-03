@@ -2,206 +2,61 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Upload Prompt - PromptGoAI</title>
-
-<style>
-body{
-margin:0;
-font-family:Segoe UI;
-background:#0f172a;
-color:white;
-padding:40px;
-}
-
-.container{
-max-width:600px;
-margin:auto;
-background:#1e293b;
-padding:30px;
-border-radius:15px;
-box-shadow:0 10px 30px rgba(0,0,0,0.4);
-}
-
-h2{
-text-align:center;
-margin-bottom:20px;
-color:#38bdf8;
-}
-
-input,select,textarea{
-width:100%;
-padding:12px;
-margin-bottom:15px;
-border-radius:8px;
-border:none;
-font-size:14px;
-}
-
-textarea{
-min-height:120px;
-resize:vertical;
-}
-
-button{
-width:100%;
-padding:14px;
-background:#2563eb;
-color:white;
-border:none;
-border-radius:8px;
-font-size:16px;
-cursor:pointer;
-font-weight:bold;
-}
-
-button:hover{
-background:#1d4ed8;
-}
-
-#previewImg{
-width:100%;
-margin-bottom:15px;
-border-radius:10px;
-display:none;
-}
-
-.success{
-background:#16a34a;
-padding:10px;
-border-radius:8px;
-text-align:center;
-margin-bottom:15px;
-display:none;
-}
-
-</style>
+<title>Upload</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <script>
-/* 🔒 Admin Protection */
-let pass = prompt("Enter Admin Password");
-if(pass !== "12345"){
-alert("Access Denied");
-location.href="index.html";
-}
+let pass=prompt("Enter Admin Password");
+if(pass!=="12345"){alert("Access Denied");location.href="index.html";}
 </script>
 
 <div class="container">
+<h2>Upload Prompt</h2>
 
-<h2>🚀 Upload Prompt Panel</h2>
-
-<div class="success" id="successMsg">
-Prompt Uploaded Successfully ✅
-</div>
-
-<input type="text" id="title" placeholder="Enter Prompt Title">
-
-<textarea id="promptText" placeholder="Enter Full Prompt"></textarea>
-
-<input type="text" id="imageUrl" placeholder="Image Direct Link">
-
-<img id="previewImg">
-
-<input type="text" id="keywords" placeholder="Keywords (comma separated)">
+<input type="text" id="title" placeholder="Title">
+<textarea id="text" placeholder="Full Prompt"></textarea>
+<input type="text" id="image" placeholder="Image URL">
+<input type="text" id="keywords" placeholder="Keywords comma separated">
 
 <select id="category">
-<option value="">Select Category</option>
+<option value="">Category</option>
 <option value="gemini">Gemini</option>
 <option value="chatgpt">ChatGPT</option>
 <option value="business">Business</option>
 </select>
 
-<button onclick="addPrompt()">Upload Prompt</button>
-
+<button onclick="addPrompt()">Upload</button>
 </div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = {
-apiKey: "PASTE_YOUR_REAL_API_KEY",
-authDomain: "promptgoai.firebaseapp.com",
-projectId: "promptgoai",
-storageBucket: "promptgoai.firebasestorage.app",
-messagingSenderId: "500683349924",
-appId: "1:500683349924:web:a34bdeba6954ec69272b31"
-};
+const firebaseConfig = { apiKey:"PASTE_YOUR_REAL_API_KEY",authDomain:"promptgoai.firebaseapp.com",projectId:"promptgoai" };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
 
-/* Image Live Preview */
+window.addPrompt=async function(){
+let title=document.getElementById("title").value;
+let text=document.getElementById("text").value;
+let image=document.getElementById("image").value;
+let keywords=document.getElementById("keywords").value.split(",");
+let category=document.getElementById("category").value;
 
-const imageInput = document.getElementById("imageUrl");
-const previewImg = document.getElementById("previewImg");
-
-imageInput.addEventListener("input",()=>{
-let url = imageInput.value;
-if(url){
-previewImg.src = url;
-previewImg.style.display="block";
-previewImg.onerror=function(){
-previewImg.style.display="none";
-}
-}else{
-previewImg.style.display="none";
-}
-});
-
-/* Upload Function */
-
-window.addPrompt = async function(){
-
-let title = document.getElementById("title").value.trim();
-let text = document.getElementById("promptText").value.trim();
-let image = document.getElementById("imageUrl").value.trim();
-let keywords = document.getElementById("keywords").value.trim();
-let category = document.getElementById("category").value;
-
-if(!title || !text || !image || !category){
-alert("Please fill all required fields");
-return;
-}
-
-let keywordArray = keywords
-? keywords.split(",").map(k=>k.trim())
-: [];
-
-try{
+if(!title||!text||!image||!category){alert("Fill all fields");return;}
 
 await addDoc(collection(db,"prompts"),{
-title:title,
-text:text,
-image:image,
-keywords:keywordArray,
-category:category,
+title,text,image,keywords,category,
+likes:0,
+views:0,
 created:Date.now()
 });
 
-document.getElementById("successMsg").style.display="block";
-
-document.getElementById("title").value="";
-document.getElementById("promptText").value="";
-document.getElementById("imageUrl").value="";
-document.getElementById("keywords").value="";
-document.getElementById("category").value="";
-previewImg.style.display="none";
-
-setTimeout(()=>{
-document.getElementById("successMsg").style.display="none";
-},3000);
-
-}catch(err){
-console.log(err);
-alert("Upload Failed ❌");
+alert("Uploaded ✅");
 }
-
-}
-
 </script>
 
 </body>
