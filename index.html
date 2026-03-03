@@ -5,119 +5,162 @@
 <title>PromptGoAI</title>
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <nav>
 <h1>PromptGoAI</h1>
-<ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="all-prompts.html">All Prompts</a></li>
-</ul>
+
+<div class="nav-menu">
+<select id="navCategory" onchange="filterCategory()">
+<option value="all">All</option>
+<option value="gemini">Gemini</option>
+<option value="chatgpt">ChatGPT</option>
+<option value="business">Business</option>
+</select>
+
+<select id="navSubcategory" onchange="filterCategory()">
+<option value="">All Sub</option>
+</select>
+</div>
 </nav>
 
-<section class="hero">
-<h2>🚀 Best AI Prompt Platform</h2>
-<p>High quality prompts for creators.</p>
-<a href="all-prompts.html" class="btn">Explore Prompts</a>
-</section>
+<input type="text" id="searchBox" class="search"
+placeholder="Search prompt title..." onkeyup="searchPrompt()">
 
-<section class="section">
-<h2>🔥 Trending Prompts</h2>
-<div class="cards" id="trendingBox"></div>
-</section>
+<section class="cards" id="promptBox"></section>
 
 <footer>© 2026 PromptGoAI</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, query, orderBy, limit, getDocs, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, query, where, orderBy, getDocs, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = {
-apiKey:"PASTE_YOUR_REAL_API_KEY",
+const app = initializeApp({
+apiKey:"PASTE_KEY",
 authDomain:"promptgoai.firebaseapp.com",
 projectId:"promptgoai",
 storageBucket:"promptgoai.firebasestorage.app",
-messagingSenderId:"500683349924",
-appId:"1:500683349924:web:a34bdeba6954ec69272b31"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-/* LIKE */
-window.likePrompt = async function(id){
-await updateDoc(doc(db,"prompts",id),{likes:increment(1)});
-loadTrending();
-}
-
-/* VIEW */
-window.viewPrompt = async function(id){
-await updateDoc(doc(db,"prompts",id),{views:increment(1)});
-}
-
-/* COPY */
-window.copyPrompt = function(text){
-navigator.clipboard.writeText(text).then(()=>{
-alert("Copied ✅");
+appId:"1:promptgoai:web:a34bdeba6954ec69272b31"
 });
+
+const db=getFirestore(app);
+
+let allData=[];
+
+/* Like */
+
+window.likePrompt=async function(id){
+await updateDoc(doc(db,"prompts",id),{
+likes:increment(1)
+});
+loadData();
 }
 
-/* READ MORE */
-window.toggleReadMore = function(id,fullText){
-let el=document.getElementById("preview-"+id);
+/* Toggle Prompt */
 
-if(el.dataset.expanded==="true"){
-el.innerText=fullText.substring(0,80)+"...";
-el.dataset.expanded="false";
+window.togglePrompt=function(id){
+let el=document.getElementById("full-"+id);
+let btn=document.getElementById("btn-"+id);
+
+if(el.style.display==="none"){
+el.style.display="block";
+btn.innerText="Hide Prompt";
 }else{
-el.innerText=fullText;
-el.dataset.expanded="true";
-viewPrompt(id);
+el.style.display="none";
+btn.innerText="View Prompt";
 }
 }
 
-async function loadTrending(){
-const q=query(collection(db,"prompts"),orderBy("created","desc"),limit(6));
-const snap=await getDocs(q);
+/* Copy */
 
-const box=document.getElementById("trendingBox");
+window.copyPrompt=function(id){
+let text=document.getElementById("full-"+id).innerText;
+navigator.clipboard.writeText(text);
+alert("Copied ✅");
+}
+
+/* Load Data */
+
+async function loadData(category="all",subcategory=""){
+
+let q;
+
+if(category==="all"){
+q=query(collection(db,"prompts"),orderBy("created","desc"));
+}else{
+q=query(collection(db,"prompts"),where("category","==",category),orderBy("created","desc"));
+}
+
+let snap=await getDocs(q);
+
+allData=[];
+snap.forEach(d=>allData.push({id:d.id,...d.data()}));
+
+display(allData);
+}
+
+/* Display */
+
+function display(data){
+
+let box=document.getElementById("promptBox");
 box.innerHTML="";
 
-snap.forEach(d=>{
-let p=d.data();
-let preview=p.text.length>80?p.text.substring(0,80)+"...":p.text;
+let search=document.getElementById("searchBox").value.toLowerCase();
+
+data.filter(p=>p.title.toLowerCase().includes(search))
+.forEach(p=>{
+
+let short=p.text.substring(0,120)+"...";
 
 box.innerHTML+=`
 <div class="card">
+
 <img src="${p.image||''}" onerror="this.style.display='none'">
+
 <h3>${p.title}</h3>
 
-<p id="preview-${d.id}" data-expanded="false">
-${preview}
+<p id="short-${p.id}">${short}</p>
+
+<p id="full-${p.id}" style="display:none">
+${p.text}
 </p>
 
-<div class="meta">
-<span>❤️ ${p.likes||0}</span>
-<span>👁 ${p.views||0}</span>
-</div>
-
-<button class="btn" onclick="toggleReadMore('${d.id}', ${JSON.stringify(p.text)})">
-Read More
+<button class="btn" id="btn-${p.id}"
+onclick="togglePrompt('${p.id}')">
+View Prompt
 </button>
 
-<button class="btn" onclick="copyPrompt(${JSON.stringify(p.text)})">
+<button class="btn" onclick="copyPrompt('${p.id}')">
 Copy
 </button>
 
-<button class="btn" onclick="likePrompt('${d.id}')">
-Like
+<button class="btn" onclick="likePrompt('${p.id}')">
+❤️ ${p.likes||0}
 </button>
 
-</div>`;
+</div>
+`;
 });
+
 }
 
-loadTrending();
+/* Search */
+
+window.searchPrompt=function(){
+display(allData);
+}
+
+/* Filter */
+
+window.filterCategory=function(){
+let cat=document.getElementById("navCategory").value;
+loadData(cat);
+}
+
+loadData();
+
 </script>
 
 </body>
