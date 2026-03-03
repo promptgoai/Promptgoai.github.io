@@ -2,10 +2,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Upload Prompt</title>
+<title>Upload Prompt - PromptGoAI</title>
 
 <style>
-
 body{
 margin:0;
 font-family:Segoe UI;
@@ -20,14 +19,27 @@ margin:auto;
 background:#1e293b;
 padding:30px;
 border-radius:15px;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
-input,select{
+h2{
+text-align:center;
+margin-bottom:20px;
+color:#38bdf8;
+}
+
+input,select,textarea{
 width:100%;
 padding:12px;
 margin-bottom:15px;
 border-radius:8px;
 border:none;
+font-size:14px;
+}
+
+textarea{
+min-height:120px;
+resize:vertical;
 }
 
 button{
@@ -39,6 +51,27 @@ border:none;
 border-radius:8px;
 font-size:16px;
 cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+#previewImg{
+width:100%;
+margin-bottom:15px;
+border-radius:10px;
+display:none;
+}
+
+.success{
+background:#16a34a;
+padding:10px;
+border-radius:8px;
+text-align:center;
+margin-bottom:15px;
+display:none;
 }
 
 </style>
@@ -47,25 +80,29 @@ cursor:pointer;
 <body>
 
 <script>
-
-/* 🔒 Admin Password Protection */
-
+/* 🔒 Admin Protection */
 let pass = prompt("Enter Admin Password");
-
 if(pass !== "12345"){
 alert("Access Denied");
 location.href="index.html";
 }
-
 </script>
 
 <div class="container">
 
 <h2>🚀 Upload Prompt Panel</h2>
 
-<input type="text" id="promptText" placeholder="Enter Prompt">
+<div class="success" id="successMsg">
+Prompt Uploaded Successfully ✅
+</div>
+
+<input type="text" id="title" placeholder="Enter Prompt Title">
+
+<textarea id="promptText" placeholder="Enter Full Prompt"></textarea>
 
 <input type="text" id="imageUrl" placeholder="Image Direct Link">
+
+<img id="previewImg">
 
 <input type="text" id="keywords" placeholder="Keywords (comma separated)">
 
@@ -74,7 +111,6 @@ location.href="index.html";
 <option value="gemini">Gemini</option>
 <option value="chatgpt">ChatGPT</option>
 <option value="business">Business</option>
-<option value="all">All</option>
 </select>
 
 <button onclick="addPrompt()">Upload Prompt</button>
@@ -83,11 +119,11 @@ location.href="index.html";
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyAbTMOKPD5_YE0Z0iKNdZvl_40plYxCyug",
+apiKey: "PASTE_YOUR_REAL_API_KEY",
 authDomain: "promptgoai.firebaseapp.com",
 projectId: "promptgoai",
 storageBucket: "promptgoai.firebasestorage.app",
@@ -98,35 +134,66 @@ appId: "1:500683349924:web:a34bdeba6954ec69272b31"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* ⭐ Upload Function */
+/* Image Live Preview */
+
+const imageInput = document.getElementById("imageUrl");
+const previewImg = document.getElementById("previewImg");
+
+imageInput.addEventListener("input",()=>{
+let url = imageInput.value;
+if(url){
+previewImg.src = url;
+previewImg.style.display="block";
+previewImg.onerror=function(){
+previewImg.style.display="none";
+}
+}else{
+previewImg.style.display="none";
+}
+});
+
+/* Upload Function */
 
 window.addPrompt = async function(){
 
-let text = document.getElementById("promptText").value;
-let image = document.getElementById("imageUrl").value;
-let keywords = document.getElementById("keywords").value;
+let title = document.getElementById("title").value.trim();
+let text = document.getElementById("promptText").value.trim();
+let image = document.getElementById("imageUrl").value.trim();
+let keywords = document.getElementById("keywords").value.trim();
 let category = document.getElementById("category").value;
 
-if(!text || !image || !category){
-alert("Fill all fields");
+if(!title || !text || !image || !category){
+alert("Please fill all required fields");
 return;
 }
+
+let keywordArray = keywords
+? keywords.split(",").map(k=>k.trim())
+: [];
 
 try{
 
 await addDoc(collection(db,"prompts"),{
+title:title,
 text:text,
 image:image,
-keywords:keywords,
+keywords:keywordArray,
 category:category,
 created:Date.now()
 });
 
-alert("Upload Success ✅");
+document.getElementById("successMsg").style.display="block";
 
+document.getElementById("title").value="";
 document.getElementById("promptText").value="";
 document.getElementById("imageUrl").value="";
 document.getElementById("keywords").value="";
+document.getElementById("category").value="";
+previewImg.style.display="none";
+
+setTimeout(()=>{
+document.getElementById("successMsg").style.display="none";
+},3000);
 
 }catch(err){
 console.log(err);
