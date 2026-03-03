@@ -2,32 +2,32 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Upload Prompt</title>
+<title>Admin Upload Panel</title>
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <script>
-let pass = prompt("Enter Admin Password");
-if(pass !== "12345"){
+let pass=prompt("Enter Admin Password");
+if(pass!=="12345"){
 alert("Access Denied");
-location.href = "index.html";
+location.href="index.html";
 }
 </script>
 
 <div class="container">
-<h2>Upload Prompt</h2>
+<h2>Admin Upload Panel</h2>
 
-<input type="text" id="title" placeholder="Enter Prompt Title">
-<textarea id="text" placeholder="Enter Full Prompt"></textarea>
+<input type="text" id="title" placeholder="Prompt Title">
 
-<!-- Image URL -->
-<input type="text" id="image" placeholder="Image URL (Optional)">
+<textarea id="text" placeholder="Full Prompt"></textarea>
 
-<!-- OR Image Upload -->
+<input type="text" id="image" placeholder="Image URL OR Select File Below">
+
 <input type="file" id="fileInput" accept="image/*">
 
-<input type="text" id="keywords" placeholder="Keywords (comma separated)">
+<input type="text" id="keywords" placeholder="Keywords">
 
 <select id="category">
 <option value="">Select Category</option>
@@ -36,119 +36,85 @@ location.href = "index.html";
 <option value="business">Business</option>
 </select>
 
-<button onclick="addPrompt()">Upload Prompt</button>
+<button class="btn" onclick="addPrompt()">Upload Prompt</button>
 
-<p id="message" style="margin-top:10px;text-align:center;"></p>
+<p id="message" style="text-align:center;margin-top:10px;"></p>
 
 </div>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = {
-apiKey:"PASTE_YOUR_FIREBASE_API_KEY",
+const app=initializeApp({
+apiKey:"PASTE_FIREBASE_KEY",
 authDomain:"promptgoai.firebaseapp.com",
 projectId:"promptgoai",
 storageBucket:"promptgoai.firebasestorage.app",
-messagingSenderId:"500683349924",
-appId:"1:500683349924:web:a34bdeba6954ec69272b31"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-window.addPrompt = async function(){
-
-let title = document.getElementById("title").value.trim();
-let text = document.getElementById("text").value.trim();
-let imageURL = document.getElementById("image").value.trim();
-let file = document.getElementById("fileInput").files[0];
-let keywordsInput = document.getElementById("keywords").value.trim();
-let category = document.getElementById("category").value;
-let messageBox = document.getElementById("message");
-
-if(!title || !text || !category){
-messageBox.style.color="red";
-messageBox.innerText="Please fill required fields!";
-return;
-}
-
-messageBox.style.color="white";
-messageBox.innerText="Uploading... ⏳";
-
-let finalImageURL = "";
-
-/* If file selected → Upload to ImgBB */
-if(file){
-
-let formData = new FormData();
-formData.append("image", file);
-
-try{
-let response = await fetch("https://api.imgbb.com/1/upload?key=3c2d8f5c5bfbbf43d0d439e931e089a3",{
-method:"POST",
-body:formData
+appId:"1:promptgoai:web:a34bdeba6954ec69272b31"
 });
 
-let data = await response.json();
-finalImageURL = data.data.url;
+const db=getFirestore(app);
 
-}catch(error){
-messageBox.style.color="red";
-messageBox.innerText="Image Upload Failed ❌";
+/* ImgBB Key */
+const IMGBB_KEY="3c2d8f5c5bfbbf43d0d439e931e089a3";
+
+window.addPrompt=async function(){
+
+let title=document.getElementById("title").value.trim();
+let text=document.getElementById("text").value.trim();
+let imageURL=document.getElementById("image").value.trim();
+let file=document.getElementById("fileInput").files[0];
+let keywords=document.getElementById("keywords").value.split(",");
+let category=document.getElementById("category").value;
+
+if(!title||!text||!category){
+alert("Fill required fields");
 return;
 }
 
+let finalImage="";
+
+/* Upload Image */
+
+if(file){
+
+let form=new FormData();
+form.append("image",file);
+
+let res=await fetch("https://api.imgbb.com/1/upload?key="+IMGBB_KEY,{
+method:"POST",
+body:form
+});
+
+let data=await res.json();
+finalImage=data.data.url;
+
+}else{
+finalImage=imageURL;
 }
-/* If URL entered */
-else if(imageURL){
-
-if(!imageURL.startsWith("http")){
-messageBox.style.color="red";
-messageBox.innerText="Invalid Image URL!";
-return;
-}
-
-finalImageURL = imageURL;
-}
-
-/* Keywords clean */
-let keywords = keywordsInput 
-? keywordsInput.split(",").map(k => k.trim()).filter(k => k !== "")
-: [];
-
-try{
 
 await addDoc(collection(db,"prompts"),{
 title,
 text,
-image: finalImageURL,
+image:finalImage,
 keywords,
 category,
+subcategory:"",
 likes:0,
-views:0,
 created:Date.now()
 });
 
-messageBox.style.color="lightgreen";
-messageBox.innerText="Upload Successful ✅";
+document.getElementById("message").innerText="Upload Success ✅";
 
-/* Clear form */
 document.getElementById("title").value="";
 document.getElementById("text").value="";
 document.getElementById("image").value="";
 document.getElementById("keywords").value="";
-document.getElementById("category").value="";
 document.getElementById("fileInput").value="";
+};
 
-}catch(error){
-console.log(error);
-messageBox.style.color="red";
-messageBox.innerText="Upload Failed ❌";
-}
-
-}
 </script>
 
 </body>
