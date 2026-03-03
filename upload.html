@@ -2,60 +2,112 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Upload</title>
+<title>Upload Prompt</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <script>
-let pass=prompt("Enter Admin Password");
-if(pass!=="12345"){alert("Access Denied");location.href="index.html";}
+let pass = prompt("Enter Admin Password");
+if(pass !== "12345"){
+alert("Access Denied");
+location.href = "index.html";
+}
 </script>
 
 <div class="container">
 <h2>Upload Prompt</h2>
 
-<input type="text" id="title" placeholder="Title">
-<textarea id="text" placeholder="Full Prompt"></textarea>
-<input type="text" id="image" placeholder="Image URL">
-<input type="text" id="keywords" placeholder="Keywords comma separated">
+<input type="text" id="title" placeholder="Enter Prompt Title">
+<textarea id="text" placeholder="Enter Full Prompt"></textarea>
+<input type="text" id="image" placeholder="Image URL (Optional)">
+<input type="text" id="keywords" placeholder="Keywords (comma separated)">
 
 <select id="category">
-<option value="">Category</option>
+<option value="">Select Category</option>
 <option value="gemini">Gemini</option>
 <option value="chatgpt">ChatGPT</option>
 <option value="business">Business</option>
 </select>
 
-<button onclick="addPrompt()">Upload</button>
+<button onclick="addPrompt()">Upload Prompt</button>
+
+<p id="message" style="margin-top:10px;text-align:center;"></p>
+
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = { apiKey:"PASTE_YOUR_REAL_API_KEY",authDomain:"promptgoai.firebaseapp.com",projectId:"promptgoai" };
+const firebaseConfig = {
+apiKey:"PASTE_YOUR_REAL_API_KEY",
+authDomain:"promptgoai.firebaseapp.com",
+projectId:"promptgoai",
+storageBucket:"promptgoai.firebasestorage.app",
+messagingSenderId:"500683349924",
+appId:"1:500683349924:web:a34bdeba6954ec69272b31"
+};
 
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-window.addPrompt=async function(){
-let title=document.getElementById("title").value;
-let text=document.getElementById("text").value;
-let image=document.getElementById("image").value;
-let keywords=document.getElementById("keywords").value.split(",");
-let category=document.getElementById("category").value;
+window.addPrompt = async function(){
 
-if(!title||!text||!image||!category){alert("Fill all fields");return;}
+let title = document.getElementById("title").value.trim();
+let text = document.getElementById("text").value.trim();
+let image = document.getElementById("image").value.trim();
+let keywordsInput = document.getElementById("keywords").value.trim();
+let category = document.getElementById("category").value;
+let messageBox = document.getElementById("message");
+
+if(!title || !text || !category){
+messageBox.style.color="red";
+messageBox.innerText="Please fill required fields!";
+return;
+}
+
+/* Keywords clean */
+let keywords = keywordsInput 
+? keywordsInput.split(",").map(k => k.trim()).filter(k => k !== "")
+: [];
+
+/* Basic Image Validation */
+if(image && !image.startsWith("http")){
+messageBox.style.color="red";
+messageBox.innerText="Image must be a valid URL";
+return;
+}
+
+try{
 
 await addDoc(collection(db,"prompts"),{
-title,text,image,keywords,category,
+title,
+text,
+image: image || "",
+keywords,
+category,
 likes:0,
 views:0,
 created:Date.now()
 });
 
-alert("Uploaded ✅");
+messageBox.style.color="lightgreen";
+messageBox.innerText="Upload Successful ✅";
+
+/* Clear form */
+document.getElementById("title").value="";
+document.getElementById("text").value="";
+document.getElementById("image").value="";
+document.getElementById("keywords").value="";
+document.getElementById("category").value="";
+
+}catch(error){
+console.log(error);
+messageBox.style.color="red";
+messageBox.innerText="Upload Failed ❌";
+}
+
 }
 </script>
 
