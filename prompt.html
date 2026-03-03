@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Prompt Detail</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<section class="container">
+
+<div id="promptDetail"></div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app=initializeApp({
+apiKey:"PASTE_KEY",
+authDomain:"promptgoai.firebaseapp.com",
+projectId:"promptgoai",
+storageBucket:"promptgoai.firebasestorage.app",
+appId:"1:promptgoai:web:a34bdeba6954ec69272b31"
+});
+
+const db=getFirestore(app);
+
+/* URL Parameter */
+
+const url=new URLSearchParams(window.location.search);
+const id=url.get("id");
+
+/* Load Prompt */
+
+async function loadPrompt(){
+
+const snap=await getDoc(doc(db,"prompts",id));
+
+if(!snap.exists()) return;
+
+let p=snap.data();
+
+/* HTML Detail Card */
+
+document.getElementById("promptDetail").innerHTML=`
+
+<div class="card">
+
+<img src="${p.image||''}">
+
+<h2>${p.title}</h2>
+
+<button class="btn" onclick="togglePrompt()">View Prompt</button>
+
+<p id="fullPrompt" style="display:none">
+${p.text}
+</p>
+
+<button class="btn" onclick="hidePrompt()" id="hideBtn" style="display:none">
+Hide Prompt
+</button>
+
+<button class="btn" onclick="copyPrompt()">
+Copy Prompt
+</button>
+
+</div>
+`;
+
+}
+
+/* Toggle */
+
+window.togglePrompt=function(){
+document.getElementById("fullPrompt").style.display="block";
+document.getElementById("hideBtn").style.display="inline-block";
+}
+
+/* Hide */
+
+window.hidePrompt=function(){
+document.getElementById("fullPrompt").style.display="none";
+document.getElementById("hideBtn").style.display="none";
+}
+
+/* Copy */
+
+window.copyPrompt=function(){
+let text=document.getElementById("fullPrompt").innerText;
+navigator.clipboard.writeText(text);
+alert("Copied ✅");
+}
+
+loadPrompt();
+
+</script>
+
+</body>
+</html>
