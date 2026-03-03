@@ -17,7 +17,18 @@
 
 <nav>
 
-<h1>PromptGoAI</h1>
+<div style="display:flex;align-items:center;gap:10px;cursor:pointer"
+onclick="goHome()">
+
+<img src="https://i.ibb.co/zhCrM7wh/20260304-020856.png"
+style="height:40px;width:40px;border-radius:8px"
+loading="lazy">
+
+<span style="color:#38bdf8;font-size:22px;font-weight:bold">
+PromptGoAI
+</span>
+
+</div>
 
 <div class="nav-menu">
 
@@ -226,6 +237,12 @@ document.querySelector(".nav-menu").classList.toggle("active");
 /* Initial Load */
 
 loadData();
+
+<script>
+
+window.goHome=function(){
+window.location.href="index.html";
+}
 
 </script>
 
