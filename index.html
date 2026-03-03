@@ -6,7 +6,6 @@
 <title>PromptGoAI - Best AI Prompt Platform</title>
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -18,8 +17,6 @@ body{
 background:#0f172a;
 color:white;
 }
-
-/* Navbar */
 
 nav{
 display:flex;
@@ -43,10 +40,7 @@ nav ul li a{
 color:white;
 text-decoration:none;
 font-weight:bold;
-color:white;
 }
-
-/* Category Menu */
 
 .cat-menu{
 padding:20px 8%;
@@ -64,8 +58,6 @@ background:#2563eb;
 padding:10px 18px;
 border-radius:25px;
 }
-
-/* Hero */
 
 .hero{
 padding:100px 8%;
@@ -91,20 +83,17 @@ border:none;
 margin-top:25px;
 }
 
-/* Button */
-
 .btn{
 display:inline-block;
-padding:12px 30px;
+padding:10px 20px;
 background:#38bdf8;
 color:#0f172a;
+border:none;
 border-radius:25px;
-text-decoration:none;
+cursor:pointer;
 font-weight:bold;
-margin-top:25px;
+margin-top:15px;
 }
-
-/* Section */
 
 .section{
 padding:60px 8%;
@@ -120,7 +109,7 @@ margin-top:40px;
 
 .card{
 background:linear-gradient(145deg,#1e293b,#0f172a);
-padding:30px;
+padding:20px;
 border-radius:20px;
 transition:0.3s;
 box-shadow:0 10px 25px rgba(0,0,0,0.4);
@@ -138,15 +127,9 @@ margin-bottom:15px;
 
 .card h3{
 color:#38bdf8;
-margin-bottom:15px;
+margin-bottom:10px;
+font-size:18px;
 }
-
-.card p{
-color:#cbd5e1;
-margin-bottom:20px;
-}
-
-/* Footer */
 
 footer{
 background:#0b1220;
@@ -155,7 +138,6 @@ text-align:center;
 color:#94a3b8;
 margin-top:60px;
 }
-
 </style>
 </head>
 
@@ -163,17 +145,13 @@ margin-top:60px;
 
 <nav>
 <h1>PromptGoAI</h1>
-
 <ul>
 <li><a href="index.html">Home</a></li>
 <li><a href="chatgpt.html">ChatGPT</a></li>
 <li><a href="gemini.html">Gemini</a></li>
 <li><a href="all-prompts.html">All Prompts</a></li>
 </ul>
-
 </nav>
-
-<!-- Category Menu -->
 
 <div class="cat-menu">
 <a href="all-prompts.html">All</a>
@@ -182,37 +160,22 @@ margin-top:60px;
 <a href="all-prompts.html?cat=business">Business</a>
 </div>
 
-<!-- Hero Section -->
-
 <section class="hero">
-
 <h2>🚀 Best AI Prompt Platform</h2>
-
 <p>High quality prompts for creators, students & developers.</p>
-
 <input type="text" id="searchBox" placeholder="Search prompts...">
-
 <br>
-
 <a href="all-prompts.html" class="btn">Explore Prompts</a>
-
 </section>
 
-<!-- Trending Section -->
-
 <section class="section">
-
 <h2>🔥 Trending Prompts</h2>
-
 <div class="cards" id="trendingBox"></div>
-
 </section>
 
 <footer>
 © 2026 PromptGoAI | Built with ❤️ by Arsh
 </footer>
-
-<!-- Firebase Script -->
 
 <script type="module">
 
@@ -231,11 +194,11 @@ appId: "1:500683349924:web:a34bdeba6954ec69272b31"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* Trending Loader */
-
 async function loadTrending(){
 
 const box = document.getElementById("trendingBox");
+
+try{
 
 const q = query(
 collection(db,"prompts"),
@@ -250,17 +213,27 @@ box.innerHTML="";
 snapshot.forEach(doc=>{
 let p = doc.data();
 
+let shortText = p.text ? p.text.split("\n")[0].substring(0,80) : "No Prompt";
+let imageTag = p.image ? `<img src="${p.image}" onerror="this.style.display='none'">` : "";
+
 box.innerHTML += `
 <div class="card">
-<img src="${p.image}">
-<h3>${p.text}</h3>
-<button class="btn" onclick="navigator.clipboard.writeText('${p.text}')">
-Copy
-</button>
+${imageTag}
+<h3>${shortText}...</h3>
+<button class="btn" onclick="copyText(\`${p.text}\`)">Copy</button>
 </div>
 `;
 });
 
+}catch(err){
+box.innerHTML = "Error loading prompts.";
+}
+
+}
+
+window.copyText = function(text){
+navigator.clipboard.writeText(text);
+alert("Prompt Copied ✅");
 }
 
 loadTrending();
