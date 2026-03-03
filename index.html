@@ -6,17 +6,8 @@
 <title>PromptGoAI - Best AI Prompt Platform</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
-
-body{
-background:#0f172a;
-color:white;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{background:#0f172a;color:white;}
 
 nav{
 display:flex;
@@ -26,21 +17,10 @@ padding:20px 8%;
 background:#0b1220;
 }
 
-nav h1{
-color:#38bdf8;
-}
+nav h1{color:#38bdf8;}
 
-nav ul{
-display:flex;
-gap:20px;
-list-style:none;
-}
-
-nav ul li a{
-color:white;
-text-decoration:none;
-font-weight:bold;
-}
+nav ul{display:flex;gap:20px;list-style:none;}
+nav ul li a{color:white;text-decoration:none;font-weight:bold;}
 
 .cat-menu{
 padding:20px 8%;
@@ -64,41 +44,23 @@ padding:100px 8%;
 text-align:center;
 }
 
-.hero h2{
-font-size:42px;
-margin-bottom:20px;
-}
-
-.hero p{
-color:#cbd5e1;
-margin-bottom:30px;
-font-size:18px;
-}
-
-.hero input{
-width:80%;
-padding:16px;
-border-radius:12px;
-border:none;
-margin-top:25px;
-}
+.hero h2{font-size:42px;margin-bottom:20px;}
+.hero p{color:#cbd5e1;margin-bottom:30px;font-size:18px;}
 
 .btn{
 display:inline-block;
-padding:10px 20px;
+padding:12px 30px;
 background:#38bdf8;
 color:#0f172a;
-border:none;
 border-radius:25px;
-cursor:pointer;
+text-decoration:none;
 font-weight:bold;
-margin-top:15px;
+margin-top:25px;
+border:none;
+cursor:pointer;
 }
 
-.section{
-padding:60px 8%;
-text-align:center;
-}
+.section{padding:60px 8%;text-align:center;}
 
 .cards{
 display:grid;
@@ -109,27 +71,23 @@ margin-top:40px;
 
 .card{
 background:linear-gradient(145deg,#1e293b,#0f172a);
-padding:20px;
+padding:25px;
 border-radius:20px;
-transition:0.3s;
 box-shadow:0 10px 25px rgba(0,0,0,0.4);
+transition:0.3s;
 }
 
-.card:hover{
-transform:translateY(-8px);
-}
+.card:hover{transform:translateY(-8px);}
 
 .card img{
 width:100%;
 border-radius:10px;
-margin-bottom:15px;
+object-fit:cover;
+margin-bottom:12px;
 }
 
-.card h3{
-color:#38bdf8;
-margin-bottom:10px;
-font-size:18px;
-}
+.card h3{color:#38bdf8;margin-bottom:10px;}
+.card p{color:#cbd5e1;margin-bottom:12px;}
 
 footer{
 background:#0b1220;
@@ -147,8 +105,6 @@ margin-top:60px;
 <h1>PromptGoAI</h1>
 <ul>
 <li><a href="index.html">Home</a></li>
-<li><a href="chatgpt.html">ChatGPT</a></li>
-<li><a href="gemini.html">Gemini</a></li>
 <li><a href="all-prompts.html">All Prompts</a></li>
 </ul>
 </nav>
@@ -163,8 +119,6 @@ margin-top:60px;
 <section class="hero">
 <h2>🚀 Best AI Prompt Platform</h2>
 <p>High quality prompts for creators, students & developers.</p>
-<input type="text" id="searchBox" placeholder="Search prompts...">
-<br>
 <a href="all-prompts.html" class="btn">Explore Prompts</a>
 </section>
 
@@ -179,11 +133,11 @@ margin-top:60px;
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyAbTMOKPD5_YE0Z0iKNdZvl_40plYxCyug",
+apiKey: "PASTE_YOUR_REAL_API_KEY",
 authDomain: "promptgoai.firebaseapp.com",
 projectId: "promptgoai",
 storageBucket: "promptgoai.firebasestorage.app",
@@ -195,10 +149,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 async function loadTrending(){
-
 const box = document.getElementById("trendingBox");
-
-try{
 
 const q = query(
 collection(db,"prompts"),
@@ -207,33 +158,22 @@ limit(6)
 );
 
 const snapshot = await getDocs(q);
-
 box.innerHTML="";
 
 snapshot.forEach(doc=>{
 let p = doc.data();
+let preview = p.text.length>80?p.text.substring(0,80)+"...":p.text;
 
-let shortText = p.text ? p.text.split("\n")[0].substring(0,80) : "No Prompt";
-let imageTag = p.image ? `<img src="${p.image}" onerror="this.style.display='none'">` : "";
-
-box.innerHTML += `
+box.innerHTML+=`
 <div class="card">
-${imageTag}
-<h3>${shortText}...</h3>
-<button class="btn" onclick="copyText(\`${p.text}\`)">Copy</button>
-</div>
-`;
+<img src="${p.image||''}" onerror="this.style.display='none'">
+<h3>${p.title||"AI Prompt"}</h3>
+<p>${preview}</p>
+<button class="btn" onclick="navigator.clipboard.writeText(${JSON.stringify(p.text)})">
+Copy
+</button>
+</div>`;
 });
-
-}catch(err){
-box.innerHTML = "Error loading prompts.";
-}
-
-}
-
-window.copyText = function(text){
-navigator.clipboard.writeText(text);
-alert("Prompt Copied ✅");
 }
 
 loadTrending();
