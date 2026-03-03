@@ -1,104 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PromptGoAI - Best AI Prompt Platform</title>
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-body{background:#0f172a;color:white;}
-
-nav{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 8%;
-background:#0b1220;
-}
-
-nav h1{color:#38bdf8;}
-
-nav ul{display:flex;gap:20px;list-style:none;}
-nav ul li a{color:white;text-decoration:none;font-weight:bold;}
-
-.cat-menu{
-padding:20px 8%;
-background:#1e293b;
-display:flex;
-flex-wrap:wrap;
-gap:15px;
-justify-content:center;
-}
-
-.cat-menu a{
-color:white;
-text-decoration:none;
-background:#2563eb;
-padding:10px 18px;
-border-radius:25px;
-}
-
-.hero{
-padding:100px 8%;
-text-align:center;
-}
-
-.hero h2{font-size:42px;margin-bottom:20px;}
-.hero p{color:#cbd5e1;margin-bottom:30px;font-size:18px;}
-
-.btn{
-display:inline-block;
-padding:12px 30px;
-background:#38bdf8;
-color:#0f172a;
-border-radius:25px;
-text-decoration:none;
-font-weight:bold;
-margin-top:25px;
-border:none;
-cursor:pointer;
-}
-
-.section{padding:60px 8%;text-align:center;}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:25px;
-margin-top:40px;
-}
-
-.card{
-background:linear-gradient(145deg,#1e293b,#0f172a);
-padding:25px;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.4);
-transition:0.3s;
-}
-
-.card:hover{transform:translateY(-8px);}
-
-.card img{
-width:100%;
-border-radius:10px;
-object-fit:cover;
-margin-bottom:12px;
-}
-
-.card h3{color:#38bdf8;margin-bottom:10px;}
-.card p{color:#cbd5e1;margin-bottom:12px;}
-
-footer{
-background:#0b1220;
-padding:20px;
-text-align:center;
-color:#94a3b8;
-margin-top:60px;
-}
-</style>
+<title>PromptGoAI</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <nav>
@@ -109,16 +15,9 @@ margin-top:60px;
 </ul>
 </nav>
 
-<div class="cat-menu">
-<a href="all-prompts.html">All</a>
-<a href="all-prompts.html?cat=gemini">Gemini</a>
-<a href="all-prompts.html?cat=chatgpt">ChatGPT</a>
-<a href="all-prompts.html?cat=business">Business</a>
-</div>
-
 <section class="hero">
 <h2>🚀 Best AI Prompt Platform</h2>
-<p>High quality prompts for creators, students & developers.</p>
+<p>High quality prompts for creators.</p>
 <a href="all-prompts.html" class="btn">Explore Prompts</a>
 </section>
 
@@ -127,57 +26,53 @@ margin-top:60px;
 <div class="cards" id="trendingBox"></div>
 </section>
 
-<footer>
-© 2026 PromptGoAI | Built with ❤️ by Arsh
-</footer>
+<footer>© 2026 PromptGoAI</footer>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, query, orderBy, limit, getDocs, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "PASTE_YOUR_REAL_API_KEY",
-authDomain: "promptgoai.firebaseapp.com",
-projectId: "promptgoai",
-storageBucket: "promptgoai.firebasestorage.app",
-messagingSenderId: "500683349924",
-appId: "1:500683349924:web:a34bdeba6954ec69272b31"
+apiKey:"PASTE_YOUR_REAL_API_KEY",
+authDomain:"promptgoai.firebaseapp.com",
+projectId:"promptgoai",
+storageBucket:"promptgoai.firebasestorage.app",
+messagingSenderId:"500683349924",
+appId:"1:500683349924:web:a34bdeba6954ec69272b31"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+window.likePrompt = async function(id){
+await updateDoc(doc(db,"prompts",id),{likes:increment(1)});
+location.reload();
+}
+
 async function loadTrending(){
-const box = document.getElementById("trendingBox");
+const q=query(collection(db,"prompts"),orderBy("created","desc"),limit(6));
+const snap=await getDocs(q);
 
-const q = query(
-collection(db,"prompts"),
-orderBy("created","desc"),
-limit(6)
-);
-
-const snapshot = await getDocs(q);
+const box=document.getElementById("trendingBox");
 box.innerHTML="";
 
-snapshot.forEach(doc=>{
-let p = doc.data();
-let preview = p.text.length>80?p.text.substring(0,80)+"...":p.text;
-
+snap.forEach(d=>{
+let p=d.data();
 box.innerHTML+=`
 <div class="card">
 <img src="${p.image||''}" onerror="this.style.display='none'">
-<h3>${p.title||"AI Prompt"}</h3>
-<p>${preview}</p>
-<button class="btn" onclick="navigator.clipboard.writeText(${JSON.stringify(p.text)})">
-Copy
-</button>
+<h3>${p.title}</h3>
+<p>${p.text.substring(0,80)}...</p>
+<div class="meta">
+<span>❤️ ${p.likes||0}</span>
+<span>👁 ${p.views||0}</span>
+</div>
+<button class="btn" onclick="likePrompt('${d.id}')">Like</button>
 </div>`;
 });
 }
 
 loadTrending();
-
 </script>
 
 </body>
