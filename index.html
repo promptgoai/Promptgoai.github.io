@@ -2,42 +2,41 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>PromptGoAI</title>
+<title>Prompt Detail</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<nav>
-<h1>PromptGoAI</h1>
+<section class="container">
 
-<div class="nav-menu">
-<select id="navCategory" onchange="filterCategory()">
-<option value="all">All</option>
-<option value="gemini">Gemini</option>
-<option value="chatgpt">ChatGPT</option>
-<option value="business">Business</option>
-</select>
+<div id="promptDetail"></div>
 
-<select id="navSubcategory" onchange="filterCategory()">
-<option value="">All Sub</option>
-</select>
-</div>
-</nav>
+<h3 style="margin-top:40px;color:#38bdf8">
+🔥 Related Prompts
+</h3>
 
-<input type="text" id="searchBox" class="search"
-placeholder="Search prompt title..." onkeyup="searchPrompt()">
+<div class="cards" id="recommendBox"></div>
 
-<section class="cards" id="promptBox"></section>
-
-<footer>© 2026 PromptGoAI</footer>
+</section>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, query, where, orderBy, getDocs, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const app = initializeApp({
-apiKey:"PASTE_KEY",
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+query,
+collection,
+where,
+limit,
+getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app=initializeApp({
+apiKey:"PASTE_FIREBASE_KEY",
 authDomain:"promptgoai.firebaseapp.com",
 projectId:"promptgoai",
 storageBucket:"promptgoai.firebasestorage.app",
@@ -46,120 +45,125 @@ appId:"1:promptgoai:web:a34bdeba6954ec69272b31"
 
 const db=getFirestore(app);
 
-let allData=[];
+/* URL Parameter */
 
-/* Like */
+const url=new URLSearchParams(window.location.search);
+const id=url.get("id");
 
-window.likePrompt=async function(id){
-await updateDoc(doc(db,"prompts",id),{
-likes:increment(1)
-});
-loadData();
-}
+/* Prompt Load */
 
-/* Toggle Prompt */
+async function loadPrompt(){
 
-window.togglePrompt=function(id){
-let el=document.getElementById("full-"+id);
-let btn=document.getElementById("btn-"+id);
+const snap=await getDoc(doc(db,"prompts",id));
 
-if(el.style.display==="none"){
-el.style.display="block";
-btn.innerText="Hide Prompt";
-}else{
-el.style.display="none";
-btn.innerText="View Prompt";
-}
-}
+if(!snap.exists()) return;
 
-/* Copy */
+let p=snap.data();
 
-window.copyPrompt=function(id){
-let text=document.getElementById("full-"+id).innerText;
-navigator.clipboard.writeText(text);
-alert("Copied ✅");
-}
+/* Prompt Detail UI */
 
-/* Load Data */
+document.getElementById("promptDetail").innerHTML=`
 
-async function loadData(category="all",subcategory=""){
-
-let q;
-
-if(category==="all"){
-q=query(collection(db,"prompts"),orderBy("created","desc"));
-}else{
-q=query(collection(db,"prompts"),where("category","==",category),orderBy("created","desc"));
-}
-
-let snap=await getDocs(q);
-
-allData=[];
-snap.forEach(d=>allData.push({id:d.id,...d.data()}));
-
-display(allData);
-}
-
-/* Display */
-
-function display(data){
-
-let box=document.getElementById("promptBox");
-box.innerHTML="";
-
-let search=document.getElementById("searchBox").value.toLowerCase();
-
-data.filter(p=>p.title.toLowerCase().includes(search))
-.forEach(p=>{
-
-let short=p.text.substring(0,120)+"...";
-
-box.innerHTML+=`
 <div class="card">
 
-<img src="${p.image||''}" onerror="this.style.display='none'">
+<img src="${p.image||''}" loading="lazy">
 
-<h3>${p.title}</h3>
+<h2>${p.title}</h2>
 
-<p id="short-${p.id}">${short}</p>
-
-<p id="full-${p.id}" style="display:none">
-${p.text}
-</p>
-
-<button class="btn" id="btn-${p.id}"
-onclick="togglePrompt('${p.id}')">
+<button class="btn" onclick="togglePrompt()">
 View Prompt
 </button>
 
-<button class="btn" onclick="copyPrompt('${p.id}')">
-Copy
+<p id="fullPrompt" style="display:none">
+${p.text}
+</p>
+
+<button class="btn" onclick="hidePrompt()"
+id="hideBtn" style="display:none">
+Hide Prompt
 </button>
 
-<button class="btn" onclick="likePrompt('${p.id}')">
-❤️ ${p.likes||0}
+<button class="btn" onclick="copyPrompt()">
+Copy Prompt
 </button>
 
 </div>
 `;
+
+/* Recommendation Load */
+
+loadRecommendation(p.category);
+
+}
+
+/* Recommendation Engine */
+
+async function loadRecommendation(category){
+
+const box=document.getElementById("recommendBox");
+
+const q=query(
+collection(db,"prompts"),
+where("category","==",category),
+limit(5)
+);
+
+const snap=await getDocs(q);
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+if(d.id===id) return;
+
+let p=d.data();
+
+box.innerHTML+=`
+
+<div class="card">
+
+<img src="${p.image||''}" loading="lazy"
+onerror="this.style.display='none'">
+
+<h3 onclick="openRecommend('${d.id}')"
+style="color:#38bdf8;cursor:pointer">
+${p.title}
+</h3>
+
+<p>${p.text.substring(0,80)}...</p>
+
+</div>
+`;
+
 });
 
 }
 
-/* Search */
+/* Recommendation Routing */
 
-window.searchPrompt=function(){
-display(allData);
+window.openRecommend=function(pid){
+window.location.href="prompt.html?id="+pid;
 }
 
-/* Filter */
+/* Toggle Prompt */
 
-window.filterCategory=function(){
-let cat=document.getElementById("navCategory").value;
-loadData(cat);
+window.togglePrompt=function(){
+document.getElementById("fullPrompt").style.display="block";
+document.getElementById("hideBtn").style.display="inline-block";
 }
 
-loadData();
+window.hidePrompt=function(){
+document.getElementById("fullPrompt").style.display="none";
+document.getElementById("hideBtn").style.display="none";
+}
+
+window.copyPrompt=function(){
+let text=document.getElementById("fullPrompt").innerText;
+navigator.clipboard.writeText(text);
+alert("Copied ✅");
+}
+
+loadPrompt();
 
 </script>
 
