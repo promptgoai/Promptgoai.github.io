@@ -19,17 +19,23 @@ nav{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:20px 8%;
+padding:18px 8%;
 background:#0b1220;
-}
-
-nav h1{
-color:#38bdf8;
 }
 
 .nav-menu{
 display:flex;
 gap:25px;
+}
+
+/* Logo */
+
+nav img{
+height:90px !important;
+width:auto !important;
+min-width:90px !important;
+max-height:90px !important;
+object-fit:contain !important;
 }
 
 /* Search */
@@ -82,7 +88,7 @@ margin-top:8px;
 font-weight:bold;
 }
 
-/* Admin Panel */
+/* Container */
 
 .container{
 max-width:600px;
@@ -123,23 +129,20 @@ margin-top:auto;
 color:#94a3b8;
 }
 
+/* Mobile */
+
 @media(max-width:768px){
+
 .search{
 width:90%;
 }
+
 nav{
 flex-direction:column;
-}
-}
-nav img{
-height:70px;
-width:auto;
-min-width:70px;
-object-fit:contain;
+gap:15px;
 }
 
-@media(max-width:768px){
 nav img{
-height:55px;
+height:70px !important;
 }
 }
