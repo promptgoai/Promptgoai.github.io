@@ -3,32 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PromptGoAI</title>
+<title>PromptGoAI - Generate Stunning AI Prompts</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1 onclick="goHome()">
-PromptGoAI
-</h1>
+<!-- HEADER -->
 
+<header class="main-header">
+<div class="logo" onclick="goHome()">PromptGoAI</div>
+
+<nav>
+<span onclick="goHome()">Home</span>
+<span onclick="scrollToCategory()">Categories</span>
+<span onclick="scrollToLatest()">Latest</span>
+</nav>
+</header>
+
+<!-- HERO SECTION -->
+
+<section class="hero">
+<h1>Generate Stunning AI Images with Perfect Prompts</h1>
+<p>Discover powerful prompts for Boys, Girls, Couple, Festival and Celebrations.</p>
+
+<div class="hero-search">
 <input type="text"
-class="search"
 id="searchBox"
-placeholder="Search prompt..."
+placeholder="Search prompts..."
 onkeyup="searchPrompt()">
+<button onclick="searchPrompt()">Search</button>
+</div>
+</section>
 
-<div class="navbar-menu">
+<!-- CATEGORY SECTION -->
 
-<span onclick="filterCategory('latest')">Latest Prompts</span>
-<span onclick="filterCategory('gemini')">Gemini</span>
-<span onclick="filterCategory('chatgpt')">ChatGPT</span>
-<span onclick="filterCategory('flow')">Flow</span>
+<section class="category-section" id="categories">
+
+<h2>Explore by Category</h2>
+
+<div class="category-grid">
+
+<div onclick="filterCategory('boys')" class="category-card">👦 Boys</div>
+<div onclick="filterCategory('girls')" class="category-card">👧 Girls</div>
+<div onclick="filterCategory('couple')" class="category-card">💑 Couple</div>
+<div onclick="filterCategory('festival')" class="category-card">🎉 Festival</div>
+<div onclick="filterCategory('celebration')" class="category-card">🎊 Celebration</div>
 
 </div>
+</section>
+
+<!-- LATEST PROMPTS -->
+
+<section class="latest-section" id="latest">
+
+<h2>Latest Prompts</h2>
 
 <section class="cards" id="promptBox"></section>
+
+</section>
+
+<!-- FOOTER -->
 
 <footer>
 
@@ -74,10 +109,7 @@ const db=getFirestore(app);
 
 let allData=[];
 
-/* Load Data */
-
 async function loadData(){
-
 let snap=await getDocs(
 query(collection(db,"prompts"),orderBy("created","desc"))
 );
@@ -89,8 +121,6 @@ allData.push({id:d.id,...d.data()});
 
 display(allData);
 }
-
-/* Display */
 
 function display(data){
 
@@ -111,10 +141,9 @@ box.innerHTML+=`
 <img src="${p.image||''}"
 loading="lazy"
 onclick="openPrompt('${p.id}')"
-style="cursor:pointer;width:100%;object-fit:contain;border-radius:12px;">
+style="cursor:pointer;width:100%;object-fit:cover;border-radius:12px;">
 
-<h3 onclick="openPrompt('${p.id}')"
-style="color:#38bdf8;cursor:pointer">
+<h3 onclick="openPrompt('${p.id}')">
 ${p.title}
 </h3>
 
@@ -126,12 +155,8 @@ ${p.title}
 
 </div>
 `;
-
 });
-
 }
-
-/* Routing */
 
 window.openPrompt=function(id){
 location.href="prompt.html?id="+id;
@@ -141,37 +166,29 @@ window.goHome=function(){
 location.href="index.html";
 }
 
-/* Filter */
-
-window.filterCategory=function(cat){
-
-if(cat==="latest"){
-display(allData.sort((a,b)=>b.created-a.created));
-return;
+window.scrollToCategory=function(){
+document.getElementById("categories").scrollIntoView({behavior:"smooth"});
 }
 
+window.scrollToLatest=function(){
+document.getElementById("latest").scrollIntoView({behavior:"smooth"});
+}
+
+window.filterCategory=function(cat){
 let filtered=allData.filter(p=>p.category===cat);
 display(filtered);
 }
-
-/* Search */
 
 window.searchPrompt=function(){
 display(allData);
 }
 
-/* Like */
-
 window.likePrompt=async function(id){
-
 await updateDoc(doc(db,"prompts",id),{
 likes:increment(1)
 });
-
 loadData();
 }
-
-/* Init */
 
 loadData();
 
