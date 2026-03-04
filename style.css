@@ -31,11 +31,19 @@ gap:25px;
 /* Logo */
 
 nav img{
-height:90px !important;
+height:110px !important;
 width:auto !important;
-min-width:90px !important;
-max-height:90px !important;
+min-width:110px !important;
+max-height:110px !important;
 object-fit:contain !important;
+display:block;
+}
+
+@media(max-width:768px){
+nav img{
+height:85px !important;
+min-width:85px !important;
+}
 }
 
 /* Search */
@@ -164,17 +172,8 @@ color:#38bdf8;
 /* Mobile */
 
 @media(max-width:768px){
-
-.search{
-width:90%;
-}
-
-nav{
-flex-direction:column;
-gap:15px;
-}
-
 nav img{
-height:70px !important;
+height:85px !important;
+min-width:85px !important;
 }
 }
