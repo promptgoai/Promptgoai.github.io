@@ -27,13 +27,26 @@ location.href="index.html";
 
 <input type="file" id="fileInput" accept="image/*">
 
-<input type="text" id="keywords" placeholder="Keywords">
+<input type="text" id="keywords" placeholder="Keywords (comma separated)">
+
+<!-- Category Topic -->
 
 <select id="category">
 <option value="">Select Category</option>
+<option value="boys">Boys</option>
+<option value="girls">Girls</option>
+<option value="couple">Couple</option>
+<option value="festival">Festival</option>
+<option value="celebration">Celebration</option>
+</select>
+
+<!-- Tool Type -->
+
+<select id="tool">
+<option value="">Select Tool</option>
 <option value="gemini">Gemini</option>
 <option value="chatgpt">ChatGPT</option>
-<option value="Flow">Flow</option>
+<option value="flow">Flow</option>
 </select>
 
 <button class="btn" onclick="addPrompt()">Upload Prompt</button>
@@ -48,7 +61,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const app=initializeApp({
-apiKey:"PASTE_FIREBASE_KEY",
+apiKey:"AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
 authDomain:"promptgoai.firebaseapp.com",
 projectId:"promptgoai",
 storageBucket:"promptgoai.firebasestorage.app",
@@ -57,7 +70,6 @@ appId:"1:promptgoai:web:a34bdeba6954ec69272b31"
 
 const db=getFirestore(app);
 
-/* ImgBB Key */
 const IMGBB_KEY="3c2d8f5c5bfbbf43d0d439e931e089a3";
 
 window.addPrompt=async function(){
@@ -68,15 +80,16 @@ let imageURL=document.getElementById("image").value.trim();
 let file=document.getElementById("fileInput").files[0];
 let keywords=document.getElementById("keywords").value.split(",");
 let category=document.getElementById("category").value;
+let tool=document.getElementById("tool").value;
 
-if(!title||!text||!category){
+if(!title||!text||!category||!tool){
 alert("Fill required fields");
 return;
 }
 
 let finalImage="";
 
-/* Upload Image */
+/* Image Upload */
 
 if(file){
 
@@ -101,7 +114,7 @@ text,
 image:finalImage,
 keywords,
 category,
-subcategory:"",
+tool,
 likes:0,
 created:Date.now()
 });
