@@ -11,29 +11,25 @@
 <body>
 
 
-<nav>
-
-<h1 style="color:#38bdf8;font-size:28px;cursor:pointer"
+<h1 style="text-align:center;color:#38bdf8;cursor:pointer"
 onclick="goHome()">
 PromptGoAI
 </h1>
 
-<div class="nav-menu">
+<input type="text"
+class="search"
+id="searchBox"
+placeholder="Search prompt title..."
+onkeyup="searchPrompt()">
 
-<select id="navCategory" onchange="filterCategory()">
-<option value="all">All Category</option>
-<option value="gemini">Gemini</option>
-<option value="chatgpt">ChatGPT</option>
-<option value="business">Business</option>
-</select>
+<div class="navbar-menu">
 
-<select id="navSubcategory" onchange="filterCategory()">
-<option value="">All Subcategory</option>
-</select>
+<span onclick="filterCategory('latest')">Latest Prompts</span>
+<span onclick="filterCategory('gemini')">Gemini</span>
+<span onclick="filterCategory('chatgpt')">ChatGPT</span>
+<span onclick="filterCategory('flow')">Flow</span>
 
 </div>
-
-</nav>
 
 <input type="text"
 class="search"
