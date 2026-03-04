@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +9,6 @@
 
 <body>
 
-
 <h1 style="text-align:center;color:#38bdf8;cursor:pointer"
 onclick="goHome()">
 PromptGoAI
@@ -19,7 +17,7 @@ PromptGoAI
 <input type="text"
 class="search"
 id="searchBox"
-placeholder="Search prompt title..."
+placeholder="Search prompt..."
 onkeyup="searchPrompt()">
 
 <div class="navbar-menu">
@@ -36,16 +34,13 @@ onkeyup="searchPrompt()">
 <footer>
 
 <div class="footer-title">PromptGoAI</div>
-
 <div>Best AI Prompt Platform</div>
 
 <div class="footer-links">
-
 <a href="index.html">Home</a>
 <a href="#">About</a>
 <a href="#">Contact</a>
 <a href="#">Privacy Policy</a>
-
 </div>
 
 <div style="margin-top:15px">
@@ -57,11 +52,9 @@ onkeyup="searchPrompt()">
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-getFirestore,
+import { getFirestore,
 collection,
 query,
-where,
 orderBy,
 getDocs,
 updateDoc,
@@ -69,46 +62,28 @@ doc,
 increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const app=initializeApp({
+const firebaseConfig={
 apiKey:"AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
 authDomain:"promptgoai.firebaseapp.com",
 projectId:"promptgoai",
 storageBucket:"promptgoai.firebasestorage.app",
-appId:"1:promptgoai:web:a34bdeba6954ec69272b31"
-});
+appId:"1:500683349924:web:a34bdeba6954ec69272b31"
+};
 
+const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 
 let allData=[];
-
-/* Routing */
-
-window.openPrompt=function(id){
-window.location.href="prompt.html?id="+id;
-}
-
-/* Like */
-
-window.likePrompt=async function(id){
-
-await updateDoc(doc(db,"prompts",id),{
-likes:increment(1)
-});
-
-loadData();
-
-}
 
 /* Load Data */
 
 async function loadData(){
 
-let q=query(collection(db,"prompts"),orderBy("created","desc"));
-
-let snap=await getDocs(q);
+let snap=await getDocs(
+query(collection(db,"prompts"),orderBy("created","desc"))
+);
 
 allData=[];
-
 snap.forEach(d=>{
 allData.push({id:d.id,...d.data()});
 });
@@ -121,18 +96,20 @@ display(allData);
 function display(data){
 
 let box=document.getElementById("promptBox");
+if(!box) return;
+
 box.innerHTML="";
 
 let search=document.getElementById("searchBox").value.toLowerCase();
 
-data.filter(p=>p.title.toLowerCase().includes(search))
-.forEach(p=>{
+data.filter(p=>
+p.title.toLowerCase().includes(search)
+).forEach(p=>{
 
 box.innerHTML+=`
 <div class="card">
 
-<img src="${p.image||''}" loading="lazy"
-onerror="this.style.display='none'">
+<img src="${p.image||''}" loading="lazy">
 
 <h3 onclick="openPrompt('${p.id}')"
 style="color:#38bdf8;cursor:pointer">
@@ -149,6 +126,30 @@ ${p.title}
 `;
 
 });
+
+}
+
+/* Routing */
+
+window.openPrompt=function(id){
+location.href="prompt.html?id="+id;
+}
+
+window.goHome=function(){
+location.href="index.html";
+}
+
+/* Filter */
+
+window.filterCategory=function(cat){
+
+if(cat==="latest"){
+display(allData.sort((a,b)=>b.created-a.created));
+return;
+}
+
+let filtered=allData.filter(p=>p.category===cat);
+display(filtered);
 }
 
 /* Search */
@@ -157,14 +158,22 @@ window.searchPrompt=function(){
 display(allData);
 }
 
-/* Home */
+/* Like */
 
-<script>
-window.goHome=function(){
-window.location.href="index.html";
+window.likePrompt=async function(id){
+
+await updateDoc(doc(db,"prompts",id),{
+likes:increment(1)
+});
+
+loadData();
 }
-</script>
 
+/* Init */
+
+loadData();
+
+</script>
 
 </body>
 </html>
