@@ -15,18 +15,23 @@ flex-direction:column;
 
 /* Navbar */
 
-nav{
+.navbar-menu{
 display:flex;
-justify-content:space-between;
-align-items:center;
-padding:18px 8%;
-background:#0b1220;
+justify-content:center;
+gap:35px;
+flex-wrap:nowrap;
 }
 
-.nav-menu{
-display:flex;
-gap:25px;
+.navbar-menu span{
+cursor:pointer;
+color:#94a3b8;
+font-size:16px;
 }
+
+.navbar-menu span:hover{
+color:#38bdf8;
+}
+
 
 /* Logo */
 
