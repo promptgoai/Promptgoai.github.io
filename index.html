@@ -109,7 +109,10 @@ p.title.toLowerCase().includes(search)
 box.innerHTML+=`
 <div class="card">
 
-<img src="${p.image||''}" loading="lazy">
+<img src="${p.image||''}"
+loading="lazy"
+onclick="openPrompt('${p.id}')"
+style="cursor:pointer;width:100%;object-fit:contain;border-radius:12px;">
 
 <h3 onclick="openPrompt('${p.id}')"
 style="color:#38bdf8;cursor:pointer">
