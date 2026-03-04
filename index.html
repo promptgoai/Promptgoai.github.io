@@ -26,6 +26,12 @@ loading="lazy">
 
 </div>
 
+<nav>
+
+<div onclick="goHome()" style="cursor:pointer;text-align:center">
+<img src="https://i.ibb.co/jscS7J6/20260304-143721.png">
+</div>
+
 <div class="nav-menu">
 
 <select id="navCategory" onchange="filterCategory()">
@@ -33,6 +39,10 @@ loading="lazy">
 <option value="gemini">Gemini</option>
 <option value="chatgpt">ChatGPT</option>
 <option value="business">Business</option>
+</select>
+
+<select id="navSubcategory" onchange="filterCategory()">
+<option value="">All Subcategory</option>
 </select>
 
 </div>
