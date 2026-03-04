@@ -291,3 +291,37 @@ font-weight:bold !important;
 box-shadow:0 8px 20px rgba(0,0,0,0.4) !important;
 text-align:center !important;
 }
+
+/* HERO IMAGE LAYOUT FIX */
+
+.hero{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:80px 8%;
+gap:40px;
+flex-wrap:wrap;
+}
+
+.hero-content{
+flex:1;
+min-width:280px;
+}
+
+.hero-image{
+flex:1;
+min-width:280px;
+text-align:center;
+}
+
+.hero-image img{
+width:100%;
+max-width:450px;
+animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0px);}
+50%{transform:translateY(-15px);}
+100%{transform:translateY(0px);}
+}
