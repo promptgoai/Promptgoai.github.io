@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,13 +11,16 @@
 <meta name="description" content="PromptGoAI - Free AI Prompt Generator Platform for AI Image Creation, Boys, Girls, Couple and Festival prompts.">
 
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
+
 <!-- HEADER -->
 
 <header class="main-header">
+
 <div class="logo" onclick="goHome()">PromptGoAI</div>
 
 <nav>
@@ -23,32 +28,61 @@
 <span onclick="scrollToCategory()">Categories</span>
 <span onclick="scrollToLatest()">Latest</span>
 </nav>
+
 </header>
 
-<!-- HERO SECTION -->
+
+<!-- HERO -->
 
 <section class="hero">
 
 <div class="hero-content">
+
 <h1>Generate Stunning AI Images with Perfect Prompts</h1>
+
 <p>Discover powerful prompts for Boys, Girls, Couple, Festival and Celebrations.</p>
 
 <div class="hero-search">
-<input type="text"
+
+<input
+type="text"
 id="searchBox"
 placeholder="Search prompts..."
-onkeyup="searchPrompt()">
+onkeyup="searchPrompt()"
+>
+
 <button onclick="searchPrompt()">Search</button>
+
 </div>
+
 </div>
 
 <div class="hero-image">
-<img src="https://i.ibb.co/5XxQgBGy/hero-png.png" alt="AI Illustration">
+
+<img
+src="https://i.ibb.co/5XxQgBGy/hero-png.png"
+alt="AI Illustration"
+>
+
 </div>
 
 </section>
 
-<!-- CATEGORY SECTION -->
+
+
+<!-- TRENDING SECTION -->
+
+<section class="latest-section">
+
+<h2>🔥 Trending Prompts</h2>
+
+<div class="trending-slider" id="trendingBox"></div>
+
+</section>
+
+
+
+<!-- CATEGORY -->
 
 <section class="category-section" id="categories">
 
@@ -57,16 +91,24 @@ onkeyup="searchPrompt()">
 <div class="category-grid">
 
 <div onclick="filterCategory('boys')" class="category-card">👦 Boys</div>
+
 <div onclick="filterCategory('girls')" class="category-card">👧 Girls</div>
+
 <div onclick="filterCategory('couple')" class="category-card">💑 Couple</div>
+
 <div onclick="filterCategory('festival')" class="category-card">🎉 Festival</div>
+
 <div onclick="filterCategory('celebration')" class="category-card">🎊 Celebration</div>
+
 <div onclick="filterCategory('aiart')" class="category-card">🎨 AI Art</div>
 
 </div>
+
 </section>
 
-<!-- LATEST PROMPTS -->
+
+
+<!-- LATEST -->
 
 <section class="latest-section" id="latest">
 
@@ -76,18 +118,26 @@ onkeyup="searchPrompt()">
 
 </section>
 
+
+
 <!-- FOOTER -->
 
 <footer>
 
 <div class="footer-title">PromptGoAI</div>
+
 <div>Best AI Prompt Platform</div>
 
 <div class="footer-links">
+
 <a href="index.html">Home</a>
+
 <a href="#">About</a>
+
 <a href="#">Contact</a>
+
 <a href="#">Privacy Policy</a>
+
 </div>
 
 <div style="margin-top:15px">
@@ -96,10 +146,16 @@ onkeyup="searchPrompt()">
 
 </footer>
 
+
+
+
 <script type="module">
 
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 import {
+
 getFirestore,
 collection,
 query,
@@ -108,132 +164,326 @@ getDocs,
 updateDoc,
 doc,
 increment
+
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig={
-apiKey:"AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
-authDomain:"promptgoai.firebaseapp.com",
-projectId:"promptgoai",
-storageBucket:"promptgoai.firebasestorage.app",
-appId:"1:500683349924:web:a34bdeba6954ec69272b31"
+
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
+
+authDomain: "promptgoai.firebaseapp.com",
+
+projectId: "promptgoai",
+
+storageBucket: "promptgoai.firebasestorage.app",
+
+messagingSenderId: "500683349924",
+
+appId: "1:500683349924:web:a34bdeba6954ec69272b31"
+
 };
 
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
 
-let allData=[];
 
-/* Load Data */
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+
+
+let allData = [];
+
+
+
+/* LOAD DATA */
 
 async function loadData(){
 
-let snap=await getDocs(
+let snap = await getDocs(
+
 query(collection(db,"prompts"),orderBy("created","desc"))
+
 );
 
+
+
 allData=[];
+
 snap.forEach(d=>{
+
 allData.push({id:d.id,...d.data()});
+
 });
 
+
+
 display(allData);
+
+loadTrending();
+
 }
 
-/* Display Cards */
+
+
+
+
+/* DISPLAY LATEST */
 
 function display(data){
 
 let box=document.getElementById("promptBox");
+
 if(!box) return;
+
+
 
 box.innerHTML="";
 
+
+
 let search=document.getElementById("searchBox").value.toLowerCase();
 
+
+
 data.filter(p=>
-(p.title || "").toLowerCase().includes(search)
+
+(p.title||"").toLowerCase().includes(search)
+
 ).forEach(p=>{
 
+
+
 box.innerHTML+=`
+
 <div class="card">
 
-<img src="${p.image||''}"
+
+
+<img
+
+src="${p.image||''}"
+
 loading="lazy"
+
 onclick="openPrompt('${p.id}')"
-style="cursor:pointer;width:100%;object-fit:cover;border-radius:12px;">
+
+style="cursor:pointer"
+
+>
+
+
 
 <h3 onclick="openPrompt('${p.id}')">
+
 ${p.title || "Untitled Prompt"}
+
 </h3>
 
-<p>${(p.text || "").substring(0,120)}...</p>
 
-<button class="btn" onclick="likePrompt('${p.id}')">
+
+<p>
+
+${(p.text || "").substring(0,100)}...
+
+</p>
+
+
+
+<button class="btn"
+
+onclick="likePrompt('${p.id}')">
+
 ❤️ ${p.likes || 0}
+
 </button>
 
+
+
 </div>
+
+`;
+
+
+
+});
+
+}
+
+
+
+/* TRENDING */
+
+function loadTrending(){
+
+
+
+let trending=[...allData]
+
+.sort((a,b)=>
+
+((b.likes||0)+(b.views||0))
+
+-
+
+((a.likes||0)+(a.views||0))
+
+)
+
+.slice(0,8);
+
+
+
+let box=document.getElementById("trendingBox");
+
+
+
+if(!box) return;
+
+
+
+box.innerHTML="";
+
+
+
+trending.forEach(p=>{
+
+box.innerHTML+=`
+
+<div class="trending-card"
+
+onclick="openPrompt('${p.id}')">
+
+
+
+<img src="${p.image||''}">
+
+
+
+</div>
+
 `;
 
 });
+
+
+
 }
 
-/* Routing */
+
+
+
+
+/* AUTO SLIDER */
+
+setInterval(()=>{
+
+let slider=document.getElementById("trendingBox");
+
+if(slider)
+
+slider.scrollBy({
+
+left:250,
+
+behavior:"smooth"
+
+});
+
+},3000);
+
+
+
+
+
+/* ROUTING */
 
 window.openPrompt=function(id){
+
 location.href="prompt.html?id="+id;
+
 }
+
+
 
 window.goHome=function(){
+
 location.href="index.html";
+
 }
 
-/* Scroll */
+
+
+/* SCROLL */
 
 window.scrollToCategory=function(){
-document.getElementById("categories")?.scrollIntoView({
-behavior:"smooth"
-});
+
+document.getElementById("categories")
+
+?.scrollIntoView({behavior:"smooth"});
+
 }
+
+
 
 window.scrollToLatest=function(){
-document.getElementById("latest")?.scrollIntoView({
-behavior:"smooth"
-});
+
+document.getElementById("latest")
+
+?.scrollIntoView({behavior:"smooth"});
+
 }
 
-/* Filter */
+
+
+/* CATEGORY FILTER */
 
 window.filterCategory=function(cat){
 
 let filtered=allData.filter(p=>p.category===cat);
+
 display(filtered);
 
 }
 
-/* Search */
+
+
+/* SEARCH */
 
 window.searchPrompt=function(){
+
 display(allData);
+
 }
 
-/* Like System */
+
+
+/* LIKE SYSTEM */
 
 window.likePrompt=async function(id){
 
 await updateDoc(doc(db,"prompts",id),{
+
 likes:increment(1)
+
 });
+
+
 
 loadData();
 
 }
 
-/* Init */
+
+
+/* INIT */
 
 loadData();
 
+
 </script>
+
 
 </body>
 </html>
