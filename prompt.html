@@ -1,95 +1,193 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="UTF-8">
+
 <title>Prompt Detail</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
+
+
 
 <section class="container">
 
 <div id="promptDetail"></div>
 
-<h3 style="margin-top:40px;">Related Prompts</h3>
-<div id="relatedPrompts" class="grid"></div>
+
+
+<h3 style="margin-top:40px;text-align:center;color:#38bdf8;">
+Related Prompts
+</h3>
+
+<div id="relatedPrompts" class="cards"></div>
+
+
 
 </section>
+
+
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
+
 getFirestore,
 doc,
 getDoc,
 collection,
 getDocs,
 query,
-where
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+where,
+updateDoc,
+increment
+
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
 
 /* Firebase Config */
 
 const app = initializeApp({
 
-apiKey: "AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
+apiKey: "AIzaSyAbTMOKPD5_YE0Z3iKnDzl_40plYxCyug",
+
 authDomain: "promptgoai.firebaseapp.com",
+
 projectId: "promptgoai",
+
 storageBucket: "promptgoai.firebasestorage.app",
+
 messagingSenderId: "500683349924",
-appId: "1:500683349924:web:a34bdeba6954ec69272b31",
-measurementId: "G-N7MLSTF3LM"
+
+appId: "1:500683349924:web:a34bdeba6954ec69272b31"
 
 });
+
+
 
 const db = getFirestore(app);
 
 
-/* URL se Prompt ID */
+
+/* URL PARAM */
 
 const url = new URLSearchParams(window.location.search);
+
 const id = url.get("id");
 
 
-/* Load Prompt */
+
+/* LOAD PROMPT */
 
 async function loadPrompt(){
+
+
 
 const snap = await getDoc(doc(db,"prompts",id));
 
 if(!snap.exists()) return;
 
+
+
 let p = snap.data();
+
+
+
+/* Views Increment */
+
+await updateDoc(doc(db,"prompts",id),{
+
+views: increment(1)
+
+});
+
 
 
 document.getElementById("promptDetail").innerHTML = `
 
 <div class="card">
 
-<img src="${p.image||''}" style="width:100%;border-radius:10px;">
 
-<h2>${p.title}</h2>
 
-<button class="btn" onclick="togglePrompt()">View Prompt</button>
+<img src="${p.image||''}"
 
-<p id="fullPrompt" style="display:none;white-space:pre-wrap;">
-${p.text}
-</p>
+style="width:100%;max-height:650px;object-fit:cover;border-radius:14px;">
 
-<button class="btn" onclick="hidePrompt()" id="hideBtn" style="display:none">
-Hide Prompt
+
+
+<h2 style="margin-top:20px;color:#38bdf8">
+
+${p.title}
+
+</h2>
+
+
+
+<div style="margin-top:15px">
+
+<button class="btn" onclick="togglePrompt()">
+
+View Prompt
+
 </button>
 
+
+
 <button class="btn" onclick="copyPrompt()">
+
 Copy Prompt
+
+</button>
+
+
+
+<button class="btn" onclick="likePrompt()">
+
+❤️ ${p.likes||0}
+
 </button>
 
 </div>
+
+
+
+<p id="fullPrompt"
+
+style="display:none;white-space:pre-wrap;margin-top:25px">
+
+${p.text}
+
+</p>
+
+
+
+<button class="btn"
+
+onclick="hidePrompt()"
+
+id="hideBtn"
+
+style="display:none;margin-top:15px">
+
+Hide Prompt
+
+</button>
+
+
+
+</div>
+
 `;
+
+
 
 loadRelated(p.category);
 
@@ -97,38 +195,71 @@ loadRelated(p.category);
 
 
 
-/* Related Prompts */
+/* RELATED PROMPTS */
 
 async function loadRelated(category){
 
+
+
 const q = query(
+
 collection(db,"prompts"),
+
 where("category","==",category)
+
 );
 
-const querySnapshot = await getDocs(q);
+
+
+const snap = await getDocs(q);
+
+
 
 let html = "";
 
-querySnapshot.forEach(doc=>{
+let count = 0;
+
+
+
+snap.forEach(doc=>{
+
+
+
+if(doc.id === id) return;
+
+if(count >= 8) return;
+
+count++;
+
+
 
 let d = doc.data();
 
-if(doc.id == id) return;
+
 
 html += `
 
 <a href="prompt.html?id=${doc.id}" class="card">
 
+
+
 <img src="${d.image||''}">
 
+
+
 <h4>${d.title}</h4>
+
+
 
 </a>
 
 `;
 
+
+
 });
+
+
 
 document.getElementById("relatedPrompts").innerHTML = html;
 
@@ -136,9 +267,9 @@ document.getElementById("relatedPrompts").innerHTML = html;
 
 
 
-/* Toggle */
+/* VIEW TOGGLE */
 
-window.togglePrompt = function(){
+window.togglePrompt=function(){
 
 document.getElementById("fullPrompt").style.display="block";
 
@@ -148,9 +279,9 @@ document.getElementById("hideBtn").style.display="inline-block";
 
 
 
-/* Hide */
+/* HIDE */
 
-window.hidePrompt = function(){
+window.hidePrompt=function(){
 
 document.getElementById("fullPrompt").style.display="none";
 
@@ -160,11 +291,11 @@ document.getElementById("hideBtn").style.display="none";
 
 
 
-/* Copy */
+/* COPY */
 
-window.copyPrompt = function(){
+window.copyPrompt=function(){
 
-let text = document.getElementById("fullPrompt").innerText;
+let text=document.getElementById("fullPrompt").innerText;
 
 navigator.clipboard.writeText(text);
 
@@ -174,9 +305,31 @@ alert("Copied ✅");
 
 
 
+/* LIKE SYSTEM */
+
+window.likePrompt=async function(){
+
+await updateDoc(doc(db,"prompts",id),{
+
+likes: increment(1)
+
+});
+
 loadPrompt();
 
+}
+
+
+
+/* INIT */
+
+loadPrompt();
+
+
+
 </script>
+
+
 
 </body>
 </html>
