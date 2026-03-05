@@ -12,51 +12,71 @@
 
 <div id="promptDetail"></div>
 
+<h3 style="margin-top:40px;">Related Prompts</h3>
+<div id="relatedPrompts" class="grid"></div>
+
 </section>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const app=initializeApp({
-apiKey:"PASTE_KEY",
-authDomain:"promptgoai.firebaseapp.com",
-projectId:"promptgoai",
-storageBucket:"promptgoai.firebasestorage.app",
-appId:"1:promptgoai:web:a34bdeba6954ec69272b31"
+import {
+getFirestore,
+doc,
+getDoc,
+collection,
+getDocs,
+query,
+where
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* Firebase Config */
+
+const app = initializeApp({
+
+apiKey: "AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
+authDomain: "promptgoai.firebaseapp.com",
+projectId: "promptgoai",
+storageBucket: "promptgoai.firebasestorage.app",
+messagingSenderId: "500683349924",
+appId: "1:500683349924:web:a34bdeba6954ec69272b31",
+measurementId: "G-N7MLSTF3LM"
+
 });
 
-const db=getFirestore(app);
+const db = getFirestore(app);
 
-/* URL Parameter */
 
-const url=new URLSearchParams(window.location.search);
-const id=url.get("id");
+/* URL se Prompt ID */
+
+const url = new URLSearchParams(window.location.search);
+const id = url.get("id");
+
 
 /* Load Prompt */
 
 async function loadPrompt(){
 
-const snap=await getDoc(doc(db,"prompts",id));
+const snap = await getDoc(doc(db,"prompts",id));
 
 if(!snap.exists()) return;
 
-let p=snap.data();
+let p = snap.data();
 
-/* HTML Detail Card */
 
-document.getElementById("promptDetail").innerHTML=`
+document.getElementById("promptDetail").innerHTML = `
 
 <div class="card">
 
-<img src="${p.image||''}">
+<img src="${p.image||''}" style="width:100%;border-radius:10px;">
 
 <h2>${p.title}</h2>
 
 <button class="btn" onclick="togglePrompt()">View Prompt</button>
 
-<p id="fullPrompt" style="display:none">
+<p id="fullPrompt" style="display:none;white-space:pre-wrap;">
 ${p.text}
 </p>
 
@@ -71,29 +91,88 @@ Copy Prompt
 </div>
 `;
 
+loadRelated(p.category);
+
 }
+
+
+
+/* Related Prompts */
+
+async function loadRelated(category){
+
+const q = query(
+collection(db,"prompts"),
+where("category","==",category)
+);
+
+const querySnapshot = await getDocs(q);
+
+let html = "";
+
+querySnapshot.forEach(doc=>{
+
+let d = doc.data();
+
+if(doc.id == id) return;
+
+html += `
+
+<a href="prompt.html?id=${doc.id}" class="card">
+
+<img src="${d.image||''}">
+
+<h4>${d.title}</h4>
+
+</a>
+
+`;
+
+});
+
+document.getElementById("relatedPrompts").innerHTML = html;
+
+}
+
+
 
 /* Toggle */
 
-window.togglePrompt=function(){
+window.togglePrompt = function(){
+
 document.getElementById("fullPrompt").style.display="block";
+
 document.getElementById("hideBtn").style.display="inline-block";
+
 }
+
+
 
 /* Hide */
 
-window.hidePrompt=function(){
+window.hidePrompt = function(){
+
 document.getElementById("fullPrompt").style.display="none";
+
 document.getElementById("hideBtn").style.display="none";
+
 }
+
+
 
 /* Copy */
 
-window.copyPrompt=function(){
-let text=document.getElementById("fullPrompt").innerText;
+window.copyPrompt = function(){
+
+let text = document.getElementById("fullPrompt").innerText;
+
 navigator.clipboard.writeText(text);
+
 alert("Copied ✅");
+
 }
+
+
 
 loadPrompt();
 
