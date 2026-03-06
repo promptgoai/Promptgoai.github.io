@@ -17,8 +17,6 @@
 <body>
 
 
-<!-- HEADER -->
-
 <header class="main-header">
 
 <div class="logo" onclick="goHome()">PromptGoAI</div>
@@ -32,7 +30,6 @@
 </header>
 
 
-<!-- HERO -->
 
 <section class="hero">
 
@@ -70,8 +67,6 @@ alt="AI Illustration"
 
 
 
-<!-- TRENDING SECTION -->
-
 <section class="latest-section">
 
 <h2>🔥 Trending Prompts</h2>
@@ -81,8 +76,6 @@ alt="AI Illustration"
 </section>
 
 
-
-<!-- CATEGORY -->
 
 <section class="category-section" id="categories">
 
@@ -108,19 +101,19 @@ alt="AI Illustration"
 
 
 
-<!-- LATEST -->
-
 <section class="latest-section" id="latest">
 
 <h2>Latest Prompts</h2>
 
 <section class="cards" id="promptBox"></section>
 
+<div style="text-align:center;margin-top:20px">
+<button id="loadMoreBtn" class="btn">Load More</button>
+</div>
+
 </section>
 
 
-
-<!-- FOOTER -->
 
 <footer>
 
@@ -131,11 +124,8 @@ alt="AI Illustration"
 <div class="footer-links">
 
 <a href="index.html">Home</a>
-
 <a href="#">About</a>
-
 <a href="#">Contact</a>
-
 <a href="#">Privacy Policy</a>
 
 </div>
@@ -151,11 +141,9 @@ alt="AI Illustration"
 
 <script type="module">
 
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-
 getFirestore,
 collection,
 query,
@@ -164,148 +152,113 @@ getDocs,
 updateDoc,
 doc,
 increment
-
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 
 
 const firebaseConfig = {
 
 apiKey: "AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
-
 authDomain: "promptgoai.firebaseapp.com",
-
 projectId: "promptgoai",
-
 storageBucket: "promptgoai.firebasestorage.app",
-
 messagingSenderId: "500683349924",
-
 appId: "1:500683349924:web:a34bdeba6954ec69272b31"
 
 };
 
-
-
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
 
 
 
-let allData = [];
+let allData=[];
+let currentData=[];
+let showLimit=8;
 
 
-
-/* LOAD DATA */
 
 async function loadData(){
 
 let snap = await getDocs(
-
 query(collection(db,"prompts"),orderBy("created","desc"))
-
 );
-
-
 
 allData=[];
 
 snap.forEach(d=>{
-
 allData.push({id:d.id,...d.data()});
-
 });
 
+currentData=[...allData];
 
-
-display(allData);
-
+display();
 loadTrending();
 
 }
 
 
 
+function getImage(p){
+
+if(p.image) return p.image;
+
+if(p.prompts && p.prompts.length>0)
+return p.prompts[0].image;
+
+return "";
+
+}
 
 
-/* DISPLAY LATEST */
 
-function display(data){
+function getText(p){
+
+if(p.text) return p.text;
+
+if(p.prompts && p.prompts.length>0)
+return p.prompts[0].text;
+
+return "";
+
+}
+
+
+
+function display(){
 
 let box=document.getElementById("promptBox");
 
-if(!box) return;
-
-
-
 box.innerHTML="";
 
-
-
-let search=document.getElementById("searchBox").value.toLowerCase();
-
-
-
-data.filter(p=>
-
-(p.title||"").toLowerCase().includes(search)
-
-).forEach(p=>{
-
-
+currentData.slice(0,showLimit).forEach(p=>{
 
 box.innerHTML+=`
 
 <div class="card">
 
-
-
 <img
-
-src="${p.image||''}"
-
+src="${getImage(p)}"
 loading="lazy"
-
 onclick="openPrompt('${p.id}')"
-
 style="cursor:pointer"
-
 >
 
-
-
 <h3 onclick="openPrompt('${p.id}')">
-
 ${p.title || "Untitled Prompt"}
-
 </h3>
 
-
-
 <p>
-
-${(p.text || "").substring(0,100)}...
-
+${getText(p).substring(0,100)}...
 </p>
 
-
-
 <button class="btn"
-
 onclick="likePrompt('${p.id}')">
-
 ❤️ ${p.likes || 0}
-
 </button>
-
-
 
 </div>
 
 `;
-
-
 
 });
 
@@ -313,53 +266,28 @@ onclick="likePrompt('${p.id}')">
 
 
 
-/* TRENDING */
-
 function loadTrending(){
 
-
-
 let trending=[...allData]
-
 .sort((a,b)=>
-
 ((b.likes||0)+(b.views||0))
-
 -
-
 ((a.likes||0)+(a.views||0))
-
 )
-
 .slice(0,8);
-
-
 
 let box=document.getElementById("trendingBox");
 
-
-
-if(!box) return;
-
-
-
 box.innerHTML="";
-
-
 
 trending.forEach(p=>{
 
 box.innerHTML+=`
 
 <div class="trending-card"
-
 onclick="openPrompt('${p.id}')">
 
-
-
-<img src="${p.image||''}">
-
-
+<img src="${getImage(p)}">
 
 </div>
 
@@ -367,109 +295,87 @@ onclick="openPrompt('${p.id}')">
 
 });
 
-
-
 }
 
 
-
-
-
-/* AUTO SLIDER */
 
 setInterval(()=>{
 
 let slider=document.getElementById("trendingBox");
 
-if(slider)
-
 slider.scrollBy({
-
 left:250,
-
 behavior:"smooth"
-
 });
 
 },3000);
 
 
 
-
-
-/* ROUTING */
-
 window.openPrompt=function(id){
-
 location.href="prompt.html?id="+id;
-
 }
 
 
 
 window.goHome=function(){
-
 location.href="index.html";
-
 }
 
 
 
-/* SCROLL */
-
 window.scrollToCategory=function(){
-
 document.getElementById("categories")
-
-?.scrollIntoView({behavior:"smooth"});
-
+.scrollIntoView({behavior:"smooth"});
 }
 
 
 
 window.scrollToLatest=function(){
-
 document.getElementById("latest")
-
-?.scrollIntoView({behavior:"smooth"});
-
+.scrollIntoView({behavior:"smooth"});
 }
 
 
-
-/* CATEGORY FILTER */
 
 window.filterCategory=function(cat){
 
-let filtered=allData.filter(p=>p.category===cat);
+currentData=allData.filter(p=>p.category===cat);
 
-display(filtered);
+showLimit=8;
+
+display();
 
 }
 
 
-
-/* SEARCH */
 
 window.searchPrompt=function(){
 
-display(allData);
+let search=document
+.getElementById("searchBox")
+.value
+.toLowerCase();
+
+currentData=allData.filter(p=>
+(p.title||"")
+.toLowerCase()
+.includes(search)
+);
+
+showLimit=8;
+
+display();
 
 }
 
 
-
-/* LIKE SYSTEM */
 
 window.likePrompt=async function(id){
 
 await updateDoc(doc(db,"prompts",id),{
-
 likes:increment(1)
-
 });
-
-
 
 loadData();
 
@@ -477,13 +383,21 @@ loadData();
 
 
 
-/* INIT */
+document
+.getElementById("loadMoreBtn")
+.onclick=function(){
+
+showLimit+=8;
+
+display();
+
+};
+
+
 
 loadData();
 
-
 </script>
-
 
 </body>
 </html>
