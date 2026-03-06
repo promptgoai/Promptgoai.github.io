@@ -79,6 +79,8 @@ margin-bottom:30px;
 font-size:16px;
 }
 
+/* SEARCH BAR */
+
 .hero-search{
 display:flex;
 gap:10px;
@@ -86,17 +88,24 @@ flex-wrap:wrap;
 }
 
 .hero-search input{
-padding:12px;
-width:260px;
-border-radius:8px;
-border:none;
+padding:14px;
+width:280px;
+border-radius:10px;
+border:1px solid #1e293b;
 outline:none;
+background:#020617;
+color:white;
+}
+
+.hero-search input:focus{
+border:1px solid #38bdf8;
+box-shadow:0 0 8px #38bdf8;
 }
 
 .hero-search button{
-padding:12px 20px;
+padding:14px 20px;
 border:none;
-border-radius:8px;
+border-radius:10px;
 background:#38bdf8;
 cursor:pointer;
 font-weight:bold;
@@ -148,6 +157,7 @@ border:1px solid #1e293b;
 .category-card:hover{
 transform:translateY(-6px);
 background:#1e293b;
+border-color:#38bdf8;
 }
 
 /* TRENDING */
@@ -158,6 +168,7 @@ overflow-x:auto;
 gap:20px;
 padding:20px 8%;
 scroll-behavior:smooth;
+scroll-snap-type:x mandatory;
 }
 
 .trending-slider::-webkit-scrollbar{
@@ -171,10 +182,13 @@ overflow:hidden;
 cursor:pointer;
 transition:0.3s;
 border:1px solid #1e293b;
+scroll-snap-align:start;
 }
 
 .trending-card:hover{
 transform:scale(1.05);
+border-color:#38bdf8;
+box-shadow:0 0 12px #38bdf855;
 }
 
 .trending-card img{
@@ -215,6 +229,8 @@ transition:0.35s;
 
 .card:hover{
 transform:translateY(-6px);
+border-color:#38bdf8;
+box-shadow:0 0 12px #38bdf844;
 }
 
 .card img{
@@ -283,7 +299,7 @@ margin-top:20px;
 line-height:1.6;
 }
 
-/* MULTI PROMPT GRID */
+/* MULTI PROMPT */
 
 .prompt-gallery{
 display:grid;
