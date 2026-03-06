@@ -29,7 +29,7 @@ location.href="index.html";
 
 <input type="text" id="keywords" placeholder="Keywords (comma separated)">
 
-<!-- Category Topic -->
+<!-- Category -->
 
 <select id="category">
 <option value="">Select Category</option>
@@ -41,7 +41,7 @@ location.href="index.html";
 <option value="aiart">🎨 AI Art</option>
 </select>
 
-<!-- Tool Type -->
+<!-- Tool -->
 
 <select id="tool">
 <option value="">Select Tool</option>
@@ -80,7 +80,11 @@ let text=document.getElementById("text").value.trim();
 let imageURL=document.getElementById("image").value.trim();
 let file=document.getElementById("fileInput").files[0];
 let keywords=document.getElementById("keywords").value.split(",");
-let category=document.getElementById("category").value;
+
+let category=document.getElementById("category").value
+.toLowerCase()
+.replace(/\s+/g,"");
+
 let tool=document.getElementById("tool").value;
 
 if(!title||!text||!category||!tool){
@@ -109,6 +113,8 @@ finalImage=data.data.url;
 finalImage=imageURL;
 }
 
+/* Save Firestore */
+
 await addDoc(collection(db,"prompts"),{
 title,
 text,
@@ -117,6 +123,7 @@ keywords,
 category,
 tool,
 likes:0,
+views:0,
 created:Date.now()
 });
 
