@@ -84,15 +84,10 @@ alt="AI Illustration"
 <div class="category-grid">
 
 <div onclick="filterCategory('boys')" class="category-card">👦 Boys</div>
-
 <div onclick="filterCategory('girls')" class="category-card">👧 Girls</div>
-
 <div onclick="filterCategory('couple')" class="category-card">💑 Couple</div>
-
 <div onclick="filterCategory('festival')" class="category-card">🎉 Festival</div>
-
 <div onclick="filterCategory('celebration')" class="category-card">🎊 Celebration</div>
-
 <div onclick="filterCategory('aiart')" class="category-card">🎨 AI Art</div>
 
 </div>
@@ -138,7 +133,6 @@ alt="AI Illustration"
 
 
 
-
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -166,9 +160,9 @@ appId: "1:500683349924:web:a34bdeba6954ec69272b31"
 
 };
 
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 
 
 let allData=[];
@@ -240,7 +234,6 @@ box.innerHTML+=`
 src="${getImage(p)}"
 loading="lazy"
 onclick="openPrompt('${p.id}')"
-style="cursor:pointer"
 >
 
 <h3 onclick="openPrompt('${p.id}')">
@@ -248,7 +241,7 @@ ${p.title || "Untitled Prompt"}
 </h3>
 
 <p>
-${getText(p).substring(0,100)}...
+${getText(p).substring(0,120)}...
 </p>
 
 <button class="btn"
@@ -262,6 +255,19 @@ onclick="likePrompt('${p.id}')">
 
 });
 
+
+let btn=document.getElementById("loadMoreBtn");
+
+if(showLimit>=currentData.length){
+
+btn.style.display="none";
+
+}else{
+
+btn.style.display="inline-block";
+
+}
+
 }
 
 
@@ -274,7 +280,7 @@ let trending=[...allData]
 -
 ((a.likes||0)+(a.views||0))
 )
-.slice(0,8);
+.slice(0,10);
 
 let box=document.getElementById("trendingBox");
 
@@ -303,10 +309,21 @@ setInterval(()=>{
 
 let slider=document.getElementById("trendingBox");
 
+if(slider.scrollLeft + slider.clientWidth >= slider.scrollWidth){
+
+slider.scrollTo({
+left:0,
+behavior:"smooth"
+});
+
+}else{
+
 slider.scrollBy({
 left:250,
 behavior:"smooth"
 });
+
+}
 
 },3000);
 
@@ -358,9 +375,13 @@ let search=document
 .toLowerCase();
 
 currentData=allData.filter(p=>
-(p.title||"")
-.toLowerCase()
-.includes(search)
+
+(p.title||"").toLowerCase().includes(search) ||
+
+(p.keywords||[]).join(" ").toLowerCase().includes(search) ||
+
+(p.category||"").toLowerCase().includes(search)
+
 );
 
 showLimit=8;
