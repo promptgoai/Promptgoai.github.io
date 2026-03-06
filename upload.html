@@ -29,8 +29,6 @@ location.href="index.html";
 
 <input type="text" id="keywords" placeholder="Keywords (comma separated)">
 
-<!-- Category -->
-
 <select id="category">
 <option value="">Select Category</option>
 <option value="boys">Boys</option>
@@ -40,8 +38,6 @@ location.href="index.html";
 <option value="celebration">Celebration</option>
 <option value="aiart">🎨 AI Art</option>
 </select>
-
-<!-- Tool -->
 
 <select id="tool">
 <option value="">Select Tool</option>
@@ -79,7 +75,10 @@ let title=document.getElementById("title").value.trim();
 let text=document.getElementById("text").value.trim();
 let imageURL=document.getElementById("image").value.trim();
 let file=document.getElementById("fileInput").files[0];
-let keywords=document.getElementById("keywords").value.split(",");
+
+let keywords=document.getElementById("keywords").value
+.split(",")
+.map(k=>k.trim().toLowerCase());
 
 let category=document.getElementById("category").value
 .toLowerCase()
