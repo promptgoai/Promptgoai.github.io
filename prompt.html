@@ -101,13 +101,21 @@ let p = snap.data();
 
 
 
-/* Views Increment */
+/* Views Increment Safe Mode */
+
+try{
 
 await updateDoc(doc(db,"prompts",id),{
 
 views: increment(1)
 
 });
+
+}catch(e){
+
+console.log("Views update error");
+
+}
 
 
 
@@ -125,13 +133,15 @@ style="width:100%;max-height:650px;object-fit:cover;border-radius:14px;">
 
 <h2 style="margin-top:20px;color:#38bdf8">
 
-${p.title}
+${p.title||"Untitled Prompt"}
 
 </h2>
 
 
 
 <div style="margin-top:15px">
+
+
 
 <button class="btn" onclick="togglePrompt()">
 
@@ -155,6 +165,8 @@ Copy Prompt
 
 </button>
 
+
+
 </div>
 
 
@@ -163,7 +175,7 @@ Copy Prompt
 
 style="display:none;white-space:pre-wrap;margin-top:25px">
 
-${p.text}
+${p.text||""}
 
 </p>
 
@@ -189,7 +201,7 @@ Hide Prompt
 
 
 
-loadRelated(p.category);
+loadRelated(p.category||"");
 
 }
 
@@ -205,7 +217,7 @@ const q = query(
 
 collection(db,"prompts"),
 
-where("category","==",category)
+where("category","==",category || "")
 
 );
 
@@ -247,7 +259,7 @@ html += `
 
 
 
-<h4>${d.title}</h4>
+<h4>${d.title||""}</h4>
 
 
 
@@ -309,11 +321,23 @@ alert("Copied ✅");
 
 window.likePrompt=async function(){
 
+
+
+try{
+
 await updateDoc(doc(db,"prompts",id),{
 
 likes: increment(1)
 
 });
+
+}catch(e){
+
+console.log("Like error");
+
+}
+
+
 
 loadPrompt();
 
@@ -332,4 +356,5 @@ loadPrompt();
 
 
 </body>
+
 </html>
