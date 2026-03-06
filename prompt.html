@@ -14,11 +14,9 @@
 
 <body>
 
-
 <section class="container">
 
 <div id="promptDetail"></div>
-
 
 <h3 style="margin-top:40px;text-align:center;color:#38bdf8;">
 Related Prompts
@@ -26,9 +24,7 @@ Related Prompts
 
 <div id="relatedPrompts" class="cards"></div>
 
-
 </section>
-
 
 
 <script type="module">
@@ -50,7 +46,6 @@ increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-
 const app = initializeApp({
 
 apiKey: "AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
@@ -65,20 +60,20 @@ appId: "1:500683349924:web:a34bdeba6954ec69272b31"
 const db = getFirestore(app);
 
 
-
 const url = new URLSearchParams(window.location.search);
 const id = url.get("id");
-
 
 
 async function loadPrompt(){
 
 const snap = await getDoc(doc(db,"prompts",id));
+
 if(!snap.exists()) return;
 
 let p = snap.data();
 
 
+/* VIEW COUNT */
 
 try{
 
@@ -89,12 +84,9 @@ views:increment(1)
 }catch(e){}
 
 
+/* PROMPT ARRAY SUPPORT */
 
 let prompts=[];
-
-
-
-/* OLD DATA SUPPORT */
 
 if(p.prompts){
 
@@ -103,110 +95,67 @@ prompts=p.prompts;
 }else{
 
 prompts=[{
-
 image:p.image,
 text:p.text
-
 }];
 
 }
 
 
-
 let html=`
 
-
 <h2 style="text-align:center;color:#38bdf8;margin-bottom:30px">
-
 ${p.title||"Untitled Prompt"}
-
 </h2>
 
-<div class="gallery">
-
-
+<div class="prompt-gallery">
 
 `;
 
 
+/* LOOP PROMPTS */
 
 prompts.forEach((item,i)=>{
 
 html+=`
 
-<div class="card">
+<div class="prompt-box">
 
+<img src="${item.image||''}">
 
-
-<img src="${item.image||''}"
-
-style="width:100%;border-radius:12px">
-
-
-
-<div style="margin-top:15px">
-
-
+<div style="margin-top:10px">
 
 <button class="btn"
-
 onclick="viewPrompt(${i})"
-
 id="view${i}">
-
 View Prompt
-
 </button>
 
-
-
 <button class="btn"
-
 onclick="copyPrompt(${i})">
-
 Copy Prompt
-
 </button>
-
-
 
 <button class="btn"
-
 onclick="likePrompt()">
-
 ❤️ ${p.likes||0}
-
 </button>
-
-
 
 </div>
 
-
-
 <p id="prompt${i}"
-
-style="display:none;white-space:pre-wrap;margin-top:20px">
+style="display:none;white-space:pre-wrap;margin-top:15px">
 
 ${item.text||""}
 
 </p>
 
-
-
 <button class="btn"
-
 onclick="hidePrompt(${i})"
-
 id="hide${i}"
-
 style="display:none;margin-top:10px">
-
 Hide Prompt
-
 </button>
-
-
 
 </div>
 
@@ -215,12 +164,10 @@ Hide Prompt
 });
 
 
-
 html+=`</div>`;
 
 
 document.getElementById("promptDetail").innerHTML=html;
-
 
 loadRelated(p.category||"");
 
@@ -228,7 +175,7 @@ loadRelated(p.category||"");
 
 
 
-/* RELATED */
+/* RELATED PROMPTS */
 
 async function loadRelated(category){
 
@@ -276,35 +223,31 @@ document.getElementById("relatedPrompts").innerHTML=html;
 
 
 
-/* VIEW */
+/* VIEW PROMPT */
 
 window.viewPrompt=function(i){
 
 document.getElementById("prompt"+i).style.display="block";
-
 document.getElementById("hide"+i).style.display="inline-block";
-
 document.getElementById("view"+i).style.display="none";
 
 }
 
 
 
-/* HIDE */
+/* HIDE PROMPT */
 
 window.hidePrompt=function(i){
 
 document.getElementById("prompt"+i).style.display="none";
-
 document.getElementById("hide"+i).style.display="none";
-
 document.getElementById("view"+i).style.display="inline-block";
 
 }
 
 
 
-/* COPY */
+/* COPY PROMPT */
 
 window.copyPrompt=function(i){
 
@@ -318,7 +261,7 @@ alert("Copied ✅");
 
 
 
-/* LIKE */
+/* LIKE PROMPT */
 
 window.likePrompt=async function(){
 
@@ -338,7 +281,5 @@ loadPrompt();
 
 </script>
 
-
 </body>
-
 </html>
