@@ -17,17 +17,13 @@ location.href="index.html";
 </script>
 
 <div class="container">
+
 <h2>Admin Upload Panel</h2>
 
 <input type="text" id="title" placeholder="Prompt Title">
 
-<textarea id="text" placeholder="Full Prompt"></textarea>
-
-<input type="text" id="image" placeholder="Image URL OR Select File Below">
-
-<input type="file" id="fileInput" accept="image/*">
-
 <input type="text" id="keywords" placeholder="Keywords (comma separated)">
+
 
 <select id="category">
 <option value="">Select Category</option>
@@ -39,6 +35,7 @@ location.href="index.html";
 <option value="aiart">🎨 AI Art</option>
 </select>
 
+
 <select id="tool">
 <option value="">Select Tool</option>
 <option value="gemini">Gemini</option>
@@ -46,93 +43,179 @@ location.href="index.html";
 <option value="flow">Flow</option>
 </select>
 
+
+<h3>Prompt 1</h3>
+
+<textarea id="text1" placeholder="Prompt 1"></textarea>
+<input type="file" id="file1" accept="image/*">
+
+
+<h3>Prompt 2</h3>
+
+<textarea id="text2" placeholder="Prompt 2"></textarea>
+<input type="file" id="file2" accept="image/*">
+
+
+<h3>Prompt 3</h3>
+
+<textarea id="text3" placeholder="Prompt 3"></textarea>
+<input type="file" id="file3" accept="image/*">
+
+
+<h3>Prompt 4</h3>
+
+<textarea id="text4" placeholder="Prompt 4"></textarea>
+<input type="file" id="file4" accept="image/*">
+
+
+<h3>Prompt 5</h3>
+
+<textarea id="text5" placeholder="Prompt 5"></textarea>
+<input type="file" id="file5" accept="image/*">
+
+
 <button class="btn" onclick="addPrompt()">Upload Prompt</button>
 
 <p id="message" style="text-align:center;margin-top:10px;"></p>
 
 </div>
 
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+
 const app=initializeApp({
+
 apiKey:"AIzaSyAbTMOKPD5_YE0Z3iKNdZvl_40plYxCyug",
 authDomain:"promptgoai.firebaseapp.com",
 projectId:"promptgoai",
 storageBucket:"promptgoai.firebasestorage.app",
-appId:"1:promptgoai:web:a34bdeba6954ec69272b31"
+appId:"1:500683349924:web:a34bdeba6954ec69272b31"
+
 });
 
 const db=getFirestore(app);
 
 const IMGBB_KEY="3c2d8f5c5bfbbf43d0d439e931e089a3";
 
-window.addPrompt=async function(){
 
-let title=document.getElementById("title").value.trim();
-let text=document.getElementById("text").value.trim();
-let imageURL=document.getElementById("image").value.trim();
-let file=document.getElementById("fileInput").files[0];
 
-let keywords=document.getElementById("keywords").value
-.split(",")
-.map(k=>k.trim().toLowerCase());
-
-let category=document.getElementById("category").value
-.toLowerCase()
-.replace(/\s+/g,"");
-
-let tool=document.getElementById("tool").value;
-
-if(!title||!text||!category||!tool){
-alert("Fill required fields");
-return;
-}
-
-let finalImage="";
-
-/* Image Upload */
-
-if(file){
+async function uploadImage(file){
 
 let form=new FormData();
 form.append("image",file);
 
-let res=await fetch("https://api.imgbb.com/1/upload?key="+IMGBB_KEY,{
+let res=await fetch(
+"https://api.imgbb.com/1/upload?key="+IMGBB_KEY,
+{
 method:"POST",
 body:form
 });
 
 let data=await res.json();
-finalImage=data.data.url;
 
-}else{
-finalImage=imageURL;
+return data.data.url;
+
 }
 
-/* Save Firestore */
+
+
+window.addPrompt=async function(){
+
+let title=document.getElementById("title").value.trim();
+
+let keywords=document.getElementById("keywords").value
+.split(",")
+.map(k=>k.trim().toLowerCase());
+
+
+let category=document.getElementById("category").value
+.toLowerCase()
+.replace(/\s+/g,"");
+
+
+let tool=document.getElementById("tool").value;
+
+
+
+if(!title||!category||!tool){
+
+alert("Fill required fields");
+
+return;
+
+}
+
+
+
+let prompts=[];
+
+
+
+for(let i=1;i<=5;i++){
+
+let text=document.getElementById("text"+i).value.trim();
+
+let file=document.getElementById("file"+i).files[0];
+
+
+
+if(text && file){
+
+let img=await uploadImage(file);
+
+prompts.push({
+
+image:img,
+text:text
+
+});
+
+}
+
+}
+
+
+
+if(prompts.length===0){
+
+alert("Add at least 1 prompt");
+
+return;
+
+}
+
+
+
+/* SAVE FIREBASE */
 
 await addDoc(collection(db,"prompts"),{
+
 title,
-text,
-image:finalImage,
 keywords,
 category,
 tool,
+
+prompts,
+
 likes:0,
 views:0,
+
 created:Date.now()
+
 });
+
+
 
 document.getElementById("message").innerText="Upload Success ✅";
 
-document.getElementById("title").value="";
-document.getElementById("text").value="";
-document.getElementById("image").value="";
-document.getElementById("keywords").value="";
-document.getElementById("fileInput").value="";
+
+
+location.reload();
+
 };
 
 </script>
